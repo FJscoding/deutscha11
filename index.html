@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Prima plus"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Prima plus A1.1</title>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-title" content="Prima plus"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Prima plus A1.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
@@ -218,14 +218,21 @@ function pickVoice(){
 function fillVoices(sel){sel.innerHTML=DEVOICES.length?DEVOICES.map(function(v){return '<option value="'+esc(v.voiceURI)+'"'+(deVoice&&v.voiceURI===deVoice.voiceURI?' selected':'')+'>'+esc(v.name)+(vq(v)>=2?' ★':'')+'</option>'}).join(''):'<option>Немецкие голоса не найдены</option>'}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;setTimeout(pickVoice,800)}
 var slowNext=false;
+var ttsPrimed=false;
+function primeTTS(){if(ttsPrimed||!('speechSynthesis' in window))return;ttsPrimed=true;
+  try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;u.lang='de-DE';speechSynthesis.speak(u)}catch(e){}}
+document.addEventListener('touchend',primeTTS,{once:true,passive:true});
+document.addEventListener('click',primeTTS,{once:true});
 function say(text,slow){
   if(!('speechSynthesis' in window)||!text)return;
   try{
-    speechSynthesis.cancel();
+    if(!deVoice||!DEVOICES.length)pickVoice();
     var u=new SpeechSynthesisUtterance(text);
-    u.lang='de-DE'; if(deVoice)u.voice=deVoice;
-    u.rate=slow?0.6:0.88;
-    speechSynthesis.speak(u);
+    u.lang=deVoice&&deVoice.lang?deVoice.lang:'de-DE'; if(deVoice)u.voice=deVoice;
+    u.rate=slow?0.6:0.88;u.volume=1;u.pitch=1;
+    if(speechSynthesis.speaking||speechSynthesis.pending){speechSynthesis.cancel();setTimeout(function(){try{speechSynthesis.speak(u)}catch(e){}},120)}
+    else speechSynthesis.speak(u);
+    if(speechSynthesis.paused)speechSynthesis.resume();
   }catch(e){}
 }
 var SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
@@ -1145,7 +1152,7 @@ function home(){
     h+='</div><div class="links"><button class="linkbtn" data-words="'+u.n+'">Словарик темы '+u.n+'</button></div></section>';
   });
   if(STANDALONE)h+='<section class="stats"><h2>Резервная копия</h2><p class="small muted" style="margin:0">Файл с прогрессом: пройденные части, минуты и ошибки. Если прогресс пропадёт, загрузите файл обратно — ничего не потеряется.</p><div class="row"><button class="btn ghost" data-act="exp">Сохранить в файл</button><button class="btn ghost" data-act="imp">Загрузить из файла</button><input type="file" id="impFile" accept=".json,application/json" hidden></div><div class="small" id="impMsg"></div></section>';
-  h+='<section class="stats"><h2>Озвучка</h2><label class="small muted" for="voiceSel">Немецкий голос на этом устройстве. ★ — улучшенный, звучит естественнее.</label><div class="row"><select id="voiceSel" class="vsel"></select><button class="btn ghost" data-act="vtest">Проверить</button></div></section>';
+  h+='<section class="stats"><h2>Озвучка</h2><label class="small muted" for="voiceSel">Немецкий голос на этом устройстве. ★ — улучшенный, звучит естественнее.</label><p class="small muted" style="margin:0">Нет звука? На iPad озвучка сайтов выключается в беззвучном режиме: откройте Пункт управления (свайп вниз от правого верхнего угла) и выключите колокольчик, затем прибавьте громкость кнопками сбоку.</p><div class="row"><select id="voiceSel" class="vsel"></select><button class="btn ghost" data-act="vtest">Проверить</button></div></section>';
   h+='</div>';
   app.innerHTML=h;window.scrollTo(0,0);
   var vs=document.getElementById('voiceSel');fillVoices(vs);vs.onchange=function(){deVoice=DEVOICES.find(function(v){return v.voiceURI===vs.value})||deVoice;try{localStorage.setItem('primaplus-voice',vs.value)}catch(e){}say('Hallo! Wie geht es dir?')};
