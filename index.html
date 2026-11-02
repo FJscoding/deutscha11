@@ -1,0 +1,1400 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Prima plus"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Prima plus A1.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: one column of "Lernkarten" on squared school-notebook paper; unit badges echo the book's orange corner tag */
+:root{
+  --bg:#F4F6F2; --grid:#E3E8DF; --surface:#FFFFFF; --ink:#1D2330; --muted:#5D6574; --line:#D8DDD3;
+  --accent:#E8701A; --accent-ink:#FFFFFF; --accent-soft:#FCE9DA;
+  --der:#2563C9; --das:#23934F; --die:#CF3B33;
+  --ok:#17806A; --ok-soft:#DDF2EC; --bad:#B8402C; --bad-soft:#F8E2DD; --warn:#9A6A00; --warn-soft:#FBF0D3;
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14171C; --grid:#1B1F25; --surface:#1E232B; --ink:#E8EBEF; --muted:#9AA3B0; --line:#2F3641;
+  --accent:#FF8C3A; --accent-ink:#1A0E04; --accent-soft:#3A2516;
+  --der:#79A6FF; --das:#5CCB8A; --die:#FF7D72;
+  --ok:#4FCBA9; --ok-soft:#173A32; --bad:#FF8A73; --bad-soft:#41231D; --warn:#E8B84A; --warn-soft:#3A3018;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#14171C; --grid:#1B1F25; --surface:#1E232B; --ink:#E8EBEF; --muted:#9AA3B0; --line:#2F3641;
+  --accent:#FF8C3A; --accent-ink:#1A0E04; --accent-soft:#3A2516;
+  --der:#79A6FF; --das:#5CCB8A; --die:#FF7D72;
+  --ok:#4FCBA9; --ok-soft:#173A32; --bad:#FF8A73; --bad-soft:#41231D; --warn:#E8B84A; --warn-soft:#3A3018;
+  color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background-color:var(--bg);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;
+  -webkit-tap-highlight-color:transparent}
+#app{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 75vh}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:1.6rem}
+h2{font-size:1.2rem}
+h3{font-size:1rem;font-weight:500}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* Home */
+.hero{display:flex;flex-direction:column;gap:6px;padding-block:8px 6px}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.today{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.today .meter{flex:1 1 180px;min-width:0}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:600;min-height:48px;
+  background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.btn.wide{width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.unit{display:flex;flex-direction:column;gap:10px;margin-top:26px}
+.unit-head{display:flex;align-items:center;gap:12px}
+.tag{font-family:var(--f-display);font-weight:700;background:var(--accent);color:var(--accent-ink);min-width:40px;height:40px;
+  display:grid;place-items:center;border-radius:6px 12px 6px 6px;transform:rotate(-4deg);font-size:1.15rem;flex:none}
+.tag.off{background:var(--line);color:var(--muted)}
+.unit-head .t{min-width:0}
+.lessons{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.lesson{display:flex;align-items:center;gap:12px;padding:14px 16px;text-align:left;border-top:1px solid var(--line);width:100%}
+.lesson:first-child{border-top:0}
+.lesson:hover{background:var(--accent-soft)}
+.lesson .n{font-variant-numeric:tabular-nums;color:var(--muted);width:1.6em;flex:none;font-weight:600}
+.lesson .body{flex:1;min-width:0}
+.lesson .title{font-weight:600}
+.pill{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap;flex:none;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.pill.done{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.mid{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.soon{padding:12px 16px;color:var(--muted);font-size:.92rem}
+.links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.linkbtn{font-size:.9rem;color:var(--accent);font-weight:600;padding:6px 0}
+
+/* Lesson */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:12px;padding-block:8px;margin-bottom:12px}
+.x{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);flex:none}
+.topbar .bar{flex:1}
+.count{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem;flex:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;display:flex;flex-direction:column;gap:16px}
+.kind{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.q{font-size:1.15rem;font-weight:600}
+.sub{color:var(--muted)}
+.de{font-size:1.7rem;font-weight:600;line-height:1.25;word-break:break-word}
+.de.big{font-size:2.2rem}
+.ru{font-size:1.1rem;color:var(--muted)}
+.note{background:var(--bg);border-radius:10px;padding:10px 14px;font-size:.95rem}
+.art-der{color:var(--der)} .art-das{color:var(--das)} .art-die{color:var(--die)}
+.say{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:var(--accent-soft);color:var(--ink);font-weight:600;min-height:46px}
+.say svg{width:22px;height:22px;color:var(--accent)}
+.say.huge{padding:22px 28px;font-size:1.05rem}
+.say.huge svg{width:34px;height:34px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.opt{padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--surface);text-align:left;font-weight:500;min-height:54px;font-size:1.05rem}
+.opt:hover{border-color:var(--accent)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.arts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.arts .opt{text-align:center;font-weight:700;font-size:1.3rem}
+.arts .opt.der{color:var(--der)} .arts .opt.das{color:var(--das)} .arts .opt.die{color:var(--die)}
+.sentence{font-size:1.4rem;font-weight:500;line-height:1.6}
+.sentence .blank{display:inline-block;min-width:4em;border-bottom:3px solid var(--accent);text-align:center;color:var(--accent)}
+input.answer{width:100%;font:inherit;font-size:1.35rem;padding:14px 16px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input.answer:focus{border-color:var(--accent);outline:none}
+input.answer.ok{border-color:var(--ok)} input.answer.no{border-color:var(--bad)}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.key{min-width:52px;height:48px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:1.25rem;font-weight:600}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;min-height:56px}
+.tiles.target{border-bottom:2px dashed var(--line);padding-bottom:10px}
+.tile{padding:10px 14px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--line);font-size:1.15rem;font-weight:500}
+.tile.used{visibility:hidden}
+.reading{font-size:1.12rem;line-height:1.7;white-space:pre-line;background:var(--bg);border-radius:12px;padding:14px 16px}
+.rule{display:flex;flex-direction:column;gap:12px;font-size:1.02rem}
+.rule p{margin:0}
+.rule b{font-weight:700}
+.rule .ex{background:var(--bg);border-radius:10px;padding:10px 14px;line-height:1.7}
+.rule table{border-collapse:collapse;font-size:.98rem;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+.rule td,.rule th{padding:6px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.rule th{color:var(--muted);font-weight:600}
+.hl{color:var(--accent);font-weight:700}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.actions .btn{flex:1 1 160px}
+
+/* Feedback sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:10;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));
+  border-top:2px solid var(--line);background:var(--surface)}
+.sheet .in{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.sheet.ok{background:var(--ok-soft);border-color:var(--ok)}
+.sheet.bad{background:var(--bad-soft);border-color:var(--bad)}
+.sheet.warn{background:var(--warn-soft);border-color:var(--warn)}
+.sheet .head{font-family:var(--f-display);font-weight:700;font-size:1.1rem}
+.sheet.ok .head{color:var(--ok)} .sheet.bad .head{color:var(--bad)} .sheet.warn .head{color:var(--warn)}
+.sheet .right{font-size:1.25rem;font-weight:600}
+.sheet{max-height:75vh;overflow-y:auto}
+.pairline{display:flex;align-items:center;gap:10px}
+.say.mini{padding:6px 10px;min-height:40px}
+.trline .lbl{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-right:6px}
+.rulebox{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.rulebox summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.rulebox .rule{margin-top:10px}
+
+/* Word list */
+.wl{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.wl button{display:flex;gap:12px;align-items:baseline;padding:12px 16px;border-top:1px solid var(--line);text-align:left;width:100%}
+.wl button:first-child{border-top:0}
+.wl .w{font-weight:600;flex:1 1 50%;min-width:0;word-break:break-word}
+.wl .r{color:var(--muted);flex:1 1 50%;min-width:0}
+.stats{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.tiles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tile-s{background:var(--bg);border-radius:10px;padding:10px 12px;min-width:0}
+.tile-s .k{font-size:.78rem;color:var(--muted);letter-spacing:.02em}
+.tile-s .v{font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.forecast{font-size:.95rem}
+.lrow{border-top:1px solid var(--line)}
+.lrow:first-child{border-top:0}
+.lrow .lesson{border-top:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 12px 52px}
+.chip{min-width:36px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-variant-numeric:tabular-nums}
+.chip.done{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.chip.mid{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.vsel{flex:1 1 200px;min-width:0;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);min-height:46px}
+.save{font-size:.9rem;border-radius:10px;padding:10px 12px;background:var(--bg)}
+.save.ok{background:var(--ok-soft);color:var(--ok)}
+.save.warn{background:var(--warn-soft);color:var(--warn)}
+.result{font-family:var(--f-display);font-size:2.6rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+@media (max-width:480px){.de{font-size:1.45rem}.de.big{font-size:1.8rem}.sentence{font-size:1.2rem}h1{font-size:1.35rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- storage ---------- */
+var KEY='primaplus-a11-v1';
+function load(){try{var s=localStorage.getItem(KEY);return s?JSON.parse(s):null}catch(e){return null}}
+var DB=load()||{progress:{},mistakes:[],minutes:{}};
+DB.progress=DB.progress||{};DB.mistakes=DB.mistakes||[];DB.minutes=DB.minutes||{};
+var CLOUDREF=null,cloudTimer=null,cloudState='checking';
+var STANDALONE=!(window.claude&&typeof window.claude.use==='function');
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}
+  if(CLOUDREF&&cloudState==='cloud'){clearTimeout(cloudTimer);cloudTimer=setTimeout(cloudPush,1500)}}
+function cloudPush(){if(!CLOUDREF)return Promise.resolve();return CLOUDREF.set({state:JSON.stringify(DB),updated:Date.now()}).catch(function(e){if(e&&e.code==='invalid_argument'){cloudState='denied';rerenderHome()}})}
+function mergeDB(a,b){var o={progress:{},minutes:{},mistakes:[],start:null};
+  [a,b].forEach(function(d){if(!d)return;var k;
+    for(k in d.progress||{}){var p=d.progress[k],q=o.progress[k];if(p&&(!q||(p.best||0)>(q.best||0)))o.progress[k]={best:p.best,last:p.last}}
+    for(k in d.minutes||{})o.minutes[k]=Math.max(o.minutes[k]||0,d.minutes[k]||0);
+    if(d.start&&(!o.start||d.start<o.start))o.start=d.start});
+  o.mistakes=(a&&a.mistakes&&a.mistakes.length)?a.mistakes:((b&&b.mistakes)||[]);
+  if(!o.start)delete o.start;return o}
+function rerenderHome(){if(S&&S.view==='home'){var y=window.scrollY;home();window.scrollTo(0,y)}}
+function cloudInit(){
+  var C=window.claude;if(!C||typeof C.use!=='function'){cloudState='local';rerenderHome();return}
+  Promise.all([C.use('db'),C.use('user')]).then(function(r){var db=r[0],u=r[1];if(!db||!u){cloudState='local';rerenderHome();return null}
+    return u.id().then(function(id){if(!id){cloudState='local';rerenderHome();return null}
+      CLOUDREF=db.doc('data/users/'+id+'/prima');
+      return CLOUDREF.get().then(function(snap){var remote=null;try{remote=snap.exists&&snap.data().state?JSON.parse(snap.data().state):null}catch(e){}
+        var m=mergeDB(DB,remote);DB.progress=m.progress;DB.minutes=m.minutes;DB.mistakes=m.mistakes;if(m.start)DB.start=m.start;
+        cloudState='cloud';try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}
+        rerenderHome();return cloudPush()})})}).catch(function(){cloudState='local';rerenderHome()})}
+function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+
+/* ---------- speech ---------- */
+var deVoice=null,DEVOICES=[];
+function vq(v){var t=(v.name+' '+v.voiceURI).toLowerCase();return /premium/.test(t)?3:/enhanced|erweitert|neural|natural|online/.test(t)?2:v.localService?1:0}
+function pickVoice(){
+  if(!('speechSynthesis' in window))return;
+  DEVOICES=speechSynthesis.getVoices().filter(function(v){return v.lang&&v.lang.toLowerCase().replace('_','-').indexOf('de')===0});
+  var want=null;try{want=localStorage.getItem('primaplus-voice')}catch(e){}
+  deVoice=(want&&DEVOICES.find(function(v){return v.voiceURI===want}))||DEVOICES.slice().sort(function(a,b){return vq(b)-vq(a)||(/anna/i.test(b.name)?1:0)-(/anna/i.test(a.name)?1:0)})[0]||null;
+  var sel=document.getElementById('voiceSel');if(sel)fillVoices(sel);
+}
+function fillVoices(sel){sel.innerHTML=DEVOICES.length?DEVOICES.map(function(v){return '<option value="'+esc(v.voiceURI)+'"'+(deVoice&&v.voiceURI===deVoice.voiceURI?' selected':'')+'>'+esc(v.name)+(vq(v)>=2?' ★':'')+'</option>'}).join(''):'<option>Немецкие голоса не найдены</option>'}
+if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;setTimeout(pickVoice,800)}
+var slowNext=false;
+function say(text,slow){
+  if(!('speechSynthesis' in window)||!text)return;
+  try{
+    speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang='de-DE'; if(deVoice)u.voice=deVoice;
+    u.rate=slow?0.6:0.88;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+var SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+var SNAIL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+
+/* ---------- helpers ---------- */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function pick(a,n){return shuffle(a).slice(0,n)}
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1))}
+function colorArt(s){return esc(s).replace(/(^|[\s(])(der|das|die)(\s)/g,function(m,p,a,sp){return p+'<span class="art-'+a+'">'+a+'</span>'+sp})}
+function norm(s){return String(s).replace(/[’`´]/g,"'").replace(/[.,!?;:¿¡"«»]/g,'').replace(/\s+/g,' ').trim()}
+function deUml(s){return s.replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'s').replace(/Ä/g,'A').replace(/Ö/g,'O').replace(/Ü/g,'U')}
+function translit(s){return s.replace(/ß/g,'ss').replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue')}
+function lev(a,b){var m=a.length,n=b.length,d=[];for(var i=0;i<=m;i++){d[i]=[i]}for(var j=0;j<=n;j++)d[0][j]=j;
+  for(i=1;i<=m;i++)for(j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+/* returns {res:'ok'|'near'|'no', msg, best} */
+function check(input,answers){
+  var x=norm(input); if(!x)return{res:'empty'};
+  var best=answers[0];
+  for(var i=0;i<answers.length;i++){if(x===norm(answers[i]))return{res:'ok',best:answers[i]}}
+  for(i=0;i<answers.length;i++){var a=norm(answers[i]);
+    if(x.toLowerCase()===a.toLowerCase())return{res:'ok',best:answers[i],msg:'Проверь большие буквы. В немецком с большой буквы пишутся имена, все существительные и вежливое Sie.'}}
+  for(i=0;i<answers.length;i++){a=norm(answers[i]);
+    if(translit(x.toLowerCase())===translit(a.toLowerCase()))return{res:'ok',best:answers[i],msg:'Засчитано. Но лучше пиши настоящими буквами ä, ö, ü, ß: кнопки под полем ввода.'}}
+  for(i=0;i<answers.length;i++){a=norm(answers[i]);
+    if(deUml(x.toLowerCase())===deUml(a.toLowerCase()))return{res:'no',best:answers[i],msg:'Почти! Не хватает буквы с точками (ä, ö, ü) или ß.'}}
+  for(i=0;i<answers.length;i++){a=norm(answers[i]);
+    if(a.length>4&&lev(x.toLowerCase(),a.toLowerCase())===1)return{res:'no',best:answers[i],msg:'Почти! Ошибка в одной букве.'}}
+  return{res:'no',best:best};
+}
+
+/* ---------- numbers ---------- */
+var ONES=['null','eins','zwei','drei','vier','fünf','sechs','sieben','acht','neun','zehn','elf','zwölf','dreizehn','vierzehn','fünfzehn','sechzehn','siebzehn','achtzehn','neunzehn'];
+var TENS=['','','zwanzig','dreißig','vierzig','fünfzig','sechzig','siebzig','achtzig','neunzig'];
+function u100(n){if(n<20)return ONES[n];var t=Math.floor(n/10),o=n%10;return o?(o===1?'ein':ONES[o])+'und'+TENS[t]:TENS[t]}
+function numDe(n){if(n===1000)return'tausend';if(n<100)return u100(n);var h=Math.floor(n/100),r=n%100;return(h===1?'hundert':ONES[h]+'hundert')+(r?u100(r):'')}
+function numVariants(n){var b=numDe(n),v=[b];if(n===1000)v.push('eintausend');else if(n>=100&&n<200)v.push('ein'+b);return v}
+
+/* ---------- data: verbs & nouns ---------- */
+var PRON=['ich','du','er','wir','ihr','sie','Sie'];
+var PRON_RU={ich:'я',du:'ты',er:'он',sie3:'она',es:'оно',wir:'мы',ihr:'вы (несколько друзей)',sie:'они',Sie:'Вы (вежливо)'};
+var VERBS={
+  kommen:{ru:'приходить, быть родом',f:['komme','kommst','kommt','kommen','kommt','kommen','kommen']},
+  wohnen:{ru:'жить',f:['wohne','wohnst','wohnt','wohnen','wohnt','wohnen','wohnen']},
+  'heißen':{ru:'зваться',f:['heiße','heißt','heißt','heißen','heißt','heißen','heißen']},
+  machen:{ru:'делать',f:['mache','machst','macht','machen','macht','machen','machen']},
+  spielen:{ru:'играть',f:['spiele','spielst','spielt','spielen','spielt','spielen','spielen']},
+  'mögen':{ru:'любить, нравиться',f:['mag','magst','mag','mögen','mögt','mögen','mögen']},
+  sein:{ru:'быть',f:['bin','bist','ist','sind','seid','sind','sind']},
+  haben:{ru:'иметь',f:['habe','hast','hat','haben','habt','haben','haben']},
+  fahren:{ru:'ехать, кататься',f:['fahre','fährst','fährt','fahren','fahrt','fahren','fahren']},
+  sehen:{ru:'видеть, смотреть',f:['sehe','siehst','sieht','sehen','seht','sehen','sehen']},
+  lesen:{ru:'читать',f:['lese','liest','liest','lesen','lest','lesen','lesen']},
+  sprechen:{ru:'говорить',f:['spreche','sprichst','spricht','sprechen','sprecht','sprechen','sprechen']},
+  treffen:{ru:'встречать',f:['treffe','triffst','trifft','treffen','trefft','treffen','treffen']},
+  'können':{ru:'мочь, уметь',f:['kann','kannst','kann','können','könnt','können','können']},
+  'möchten':{ru:'хотеть (хотел бы)',f:['möchte','möchtest','möchte','möchten','möchtet','möchten','möchten']},
+  nehmen:{ru:'брать',f:['nehme','nimmst','nimmt','nehmen','nehmt','nehmen','nehmen']},
+  geben:{ru:'давать',f:['gebe','gibst','gibt','geben','gebt','geben','geben']},
+  arbeiten:{ru:'работать',f:['arbeite','arbeitest','arbeitet','arbeiten','arbeitet','arbeiten','arbeiten']}
+};
+var NOUNS=[
+ ['der','Kuli','ручка'],['der','Kugelschreiber','шариковая ручка'],['der','Bleistift','карандаш'],['der','Radiergummi','ластик'],
+ ['der','Rucksack','рюкзак'],['der','Taschenrechner','калькулятор'],['der','Kleber','клей'],['der','Schreibblock','блокнот'],
+ ['der','USB-Stick','флешка'],['der','Laptop','ноутбук'],['der','Computer','компьютер'],
+ ['das','Heft','тетрадь'],['das','Buch','книга'],['das','Wörterbuch','словарь'],['das','Lineal','линейка'],
+ ['das','Mäppchen','пенал'],['das','Tablet','планшет'],['das','Smartphone','смартфон'],
+ ['die','Schere','ножницы'],['die','Brille','очки'],['die','Uhr','часы'],['die','Brotdose','коробка для бутербродов'],
+ ['die','Sporttasche','спортивная сумка'],['die','Tafel','школьная доска']
+];
+var ANIMALS=[
+ ['der','Hund','собака','Hunde'],['die','Katze','кошка','Katzen'],['das','Pferd','лошадь','Pferde'],['der','Tiger','тигр','Tiger'],
+ ['der','Hamster','хомяк','Hamster'],['das','Lama','лама','Lamas'],['das','Känguru','кенгуру','Kängurus'],['die','Schildkröte','черепаха','Schildkröten'],
+ ['die','Spinne','паук','Spinnen'],['die','Maus','мышь','Mäuse'],['die','Kuh','корова','Kühe'],['der','Wolf','волк','Wölfe'],
+ ['das','Kaninchen','кролик',''],['das','Meerschweinchen','морская свинка',''],['der','Fisch','рыба',''],['der','Papagei','попугай',''],
+ ['der','Wellensittich','волнистый попугайчик',''],['der','Kanarienvogel','канарейка',''],['das','Kamel','верблюд',''],['die','Möwe','чайка',''],
+ ['die','Antilope','антилопа',''],['der','Schmetterling','бабочка',''],['der','Bison','бизон','']
+];
+var FAMILY=[
+ ['der','Vater','папа'],['die','Mutter','мама'],['der','Bruder','брат'],['die','Schwester','сестра'],['der','Opa','дедушка'],['die','Oma','бабушка'],
+ ['der','Onkel','дядя'],['die','Tante','тётя'],['der','Cousin','двоюродный брат'],['die','Cousine','двоюродная сестра'],['der','Sohn','сын'],['die','Tochter','дочь'],
+ ['die','Eltern','родители (мн. ч.)','pl'],['die','Großeltern','бабушка и дедушка (мн. ч.)','pl'],['die','Geschwister','братья и сёстры (мн. ч.)','pl']
+];
+var JOBS=[
+ ['Lehrer','Lehrerin','учитель, учительница'],['Verkäufer','Verkäuferin','продавец, продавщица'],['Polizist','Polizistin','полицейский'],['Pilot','Pilotin','пилот'],
+ ['Arzt','Ärztin','врач'],['Tierarzt','Tierärztin','ветеринар'],['Zahnarzt','Zahnärztin','зубной врач'],['Koch','Köchin','повар'],
+ ['Informatiker','Informatikerin','программист, информатик'],['Architekt','Architektin','архитектор'],['Ingenieur','Ingenieurin','инженер'],['Sekretär','Sekretärin','секретарь'],
+ ['Automechaniker','Automechanikerin','автомеханик'],['Elektriker','Elektrikerin','электрик'],['Fußballspieler','Fußballspielerin','футболист'],['Fotograf','Fotografin','фотограф'],['Schauspieler','Schauspielerin','актёр, актриса']
+];
+var KIOSK=[
+ ['der','Kaugummi','жвачка','Kaugummis'],['das','Gummibärchen','мармеладный мишка','Gummibärchen'],['der','Schokoriegel','шоколадный батончик','Schokoriegel'],
+ ['die','Zeitung','газета','Zeitungen'],['die','Zeitschrift','журнал','Zeitschriften'],['die','Postkarte','открытка','Postkarten'],['die','Limo','лимонад','Limos'],
+ ['der','Apfelsaft','яблочный сок','Apfelsäfte'],['die','Tüte','пакетик','Tüten'],['der','Comic','комикс','Comics'],['der','Filzstift','фломастер','Filzstifte'],
+ ['das','Computerspiel','компьютерная игра','Computerspiele'],['das','Fahrrad','велосипед','Fahrräder'],['das','Tablet','планшет','Tablets']
+];
+var ARTRU={der:'мужской род',das:'средний род',die:'женский род'};
+
+/* ---------- item builders ---------- */
+function L(de,ru,note){return{t:'learn',de:de,ru:ru,note:note}}
+function C(q,opts,a,x){var o={t:'choice',q:q,opts:opts,a:a};for(var k in x)o[k]=x[k];return o}
+function T(q,a,x){var o={t:'type',q:q,a:[].concat(a)};for(var k in x)o[k]=x[k];return o}
+function G(q,s,a,x){var o={t:'gap',q:q,s:s,a:[].concat(a)};for(var k in x)o[k]=x[k];return o}
+function O(q,a,x){var o={t:'order',q:q,a:a};for(var k in x)o[k]=x[k];return o}
+function D(say,a,ru,x){var o={t:'listen',say:say,a:[].concat(a),ru:ru};for(var k in x)o[k]=x[k];return o}
+function F(q,re,example){return{t:'free',q:q,re:re,example:example}}
+function R(title,text,ru){return{t:'read',title:title,text:text,ru:ru}}
+function RULE(title,html){return{t:'rule',title:title,html:html}}
+function GEN(kind,x){var o={t:'gen',kind:kind};for(var k in x)o[k]=x[k];return o}
+
+function lst(g){return g.list==='animals'?ANIMALS:g.list==='family'?FAMILY:g.list==='kiosk'?KIOSK:NOUNS}
+function pool(g,def){var L=lst(g.list?g:{list:def});if(g.only){var f=L.filter(function(x){return g.only.indexOf(x[1])>=0});if(f.length>=2)return f}return L}
+function hw(h){h=((h-1)%12+12)%12+1;return h===1?'eins':ONES[h]}
+function timePhrase(h,m){var H=((h-1)%12+12)%12+1;
+  if(m===0)return(H===1?'ein':ONES[H])+' Uhr';
+  if(m===15)return 'Viertel nach '+hw(h);
+  if(m===30)return 'halb '+hw(h+1);
+  if(m===45)return 'Viertel vor '+hw(h+1);
+  if(m<30)return u100(m)+' nach '+hw(h);
+  return (m===40?'zwanzig':ONES[60-m])+' vor '+hw(h+1);}
+function timeDig(h,m){var H=((h-1)%12+12)%12+1;return H+':'+(m<10?'0':'')+m}
+var MINS=[0,5,10,15,20,30,40,45,50,55];
+function timeSet(){var h=rnd(1,12),m=MINS[rnd(0,MINS.length-1)];var c=[[h,m]];
+  var cand=[[h+1,m],[h-1,m]];if(m!==0&&m!==30)cand.unshift([h,60-m]);
+  cand=shuffle(cand);var seen={};seen[timeDig(h,m)]=1;
+  cand.forEach(function(x){var k=timeDig(x[0],x[1]);if(c.length<3&&!seen[k]){seen[k]=1;c.push(x)}});return c}
+function priceDe(e,c){var E=e===1?'ein':numDe(e);if(e===0)return u100(c)+' Cent';if(c===0)return E+' Euro';return E+' Euro '+u100(c)}
+function priceShow(e,c){return e+','+(c<10?'0':'')+c+' €'}
+function priceVariants(e,c){var cc=(c<10?'0':'')+c,v=[e+','+cc,e+'.'+cc,e+','+cc+' €',e+','+cc+'€'];if(c%10===0)v.push(e+','+(c/10));if(c===0)v.push(String(e));return v}
+function rndPrice(){var e=rnd(0,9),c=rnd(0,19)*5;if(e===0&&c===0)c=50;return[e,c]}
+var OWNERS=[['ich','mein','я'],['du','dein','ты'],['Bert (er)','sein','он, Берт'],['Bina (sie)','ihr','она, Бина'],['wir','unser','мы'],['ihr','euer','вы, друзья'],['Frau Meier (Sie)','Ihr','Вы, вежливо']];
+var POSSN=[['der','Vater','папа'],['der','Bruder','брат'],['der','Hund','собака'],['das','Hobby','хобби'],['das','Fahrrad','велосипед'],['die','Mutter','мама'],['die','Schwester','сестра'],['die','Katze','кошка'],['pl','Eltern','родители'],['pl','Großeltern','бабушка и дедушка']];
+
+var GENS={
+  numHear:function(g){var out=[],seen={};while(out.length<g.n){var n=rnd(g.min,g.max);if(seen[n])continue;seen[n]=1;out.push({t:'num',mode:'hear',n:n})}return out},
+  numWrite:function(g){var out=[],seen={};while(out.length<g.n){var n=rnd(g.min,g.max);if(seen[n])continue;seen[n]=1;out.push({t:'num',mode:'write',n:n})}return out},
+  conj:function(g){var out=[],seen={},guard=0;while(out.length<g.n&&guard++<200){var v=g.verbs[rnd(0,g.verbs.length-1)],p=g.prons[rnd(0,g.prons.length-1)];var k=v+p;if(seen[k])continue;seen[k]=1;
+      var shown=PRON[p];if(p===2)shown=['er','sie','es'][rnd(0,2)];out.push({t:'conj',v:v,p:p,shown:shown})}return out},
+  art:function(g){return pick(pool(g),g.n).map(function(x){return{t:'art',w:x[1],a:x[0],ru:x[2],pl:x[3]==='pl'}})},
+  artType:function(g){return pick(pool(g),g.n).map(function(x){return T('Напиши по-немецки вместе с артиклем: «'+x[2]+'»',x[0]+' '+x[1],{say:null,sayAnswer:x[0]+' '+x[1],explain:x[1]+' — '+x[0]+' ('+(x[3]==='pl'?'множественное число':ARTRU[x[0]])+').',kb:true})})},
+  ein:function(g){return pick(pool(g),g.n).map(function(x){var a=x[0]==='die'?'eine':'ein';return C('Das ist ___ '+x[1]+'.',['ein','eine'],a,{sub:x[2]+' · '+x[0]+' '+x[1],sayAnswer:'Das ist '+a+' '+x[1]+'.',explain:x[0]+' '+x[1]+' → '+a+'. С der и das — ein, с die — eine.'})})},
+  akk:function(g){var w=g.w,vb=g.verb||'habe';return pick(pool(g,'animals'),g.n).map(function(x){var a=x[0]==='der'?w+'en':x[0]==='die'?w+'e':w;var ru=(w==='kein'?'У меня нет: ':vb==='möchte'?'Я хочу: ':'У меня есть: ')+x[2];
+      return C('Ich '+vb+' ___ '+x[1]+'.',[w,w+'e',w+'en'],a,{sub:ru+' · '+x[0]+' '+x[1],sayAnswer:'Ich '+vb+' '+a+' '+x[1]+'.',explain:x[0]+' '+x[1]+' → '+a+'. После '+(vb==='möchte'?'möchte':'haben')+': der → '+w+'en, das → '+w+', die → '+w+'e.'})})},
+  timeRead:function(g){var out=[];for(var i=0;i<g.n;i++){var c=timeSet();var ph=c.map(function(x){return timePhrase(x[0],x[1])});
+      out.push(C('Как сказать по-немецки: '+timeDig(c[0][0],c[0][1])+'?',ph,ph[0],{sayAnswer:'Es ist '+ph[0]+'.',explain:timeDig(c[0][0],c[0][1])+' — '+ph[0]+'.'}))}return out},
+  timeHear:function(g){var out=[];for(var i=0;i<g.n;i++){var c=timeSet();var dg=c.map(function(x){return timeDig(x[0],x[1])});var ph=timePhrase(c[0][0],c[0][1]);
+      out.push(C('Послушай. Который час?',dg,dg[0],{say:'Es ist '+ph+'.',hide:true,sayAnswer:'Es ist '+ph+'.',explain:ph+' = '+dg[0]+'.'}))}return out},
+  priceHear:function(g){var out=[],seen={};while(out.length<g.n){var p=rndPrice(),k=p.join();if(seen[k])continue;seen[k]=1;
+      out.push(D(priceDe(p[0],p[1]),priceVariants(p[0],p[1]),'Послушай цену и напиши цифрами, через запятую (например 1,50).',{dec:true,explain:priceDe(p[0],p[1])+' = '+priceShow(p[0],p[1])+'.'}))}return out},
+  priceRead:function(g){var out=[];for(var i=0;i<g.n;i++){var p=rndPrice(),o=[priceDe(p[0],p[1])],guard=0;
+      while(o.length<3&&guard++<50){var q=Math.random()<.5?[p[0],rnd(0,19)*5]:[(p[0]+rnd(1,3))%10,p[1]];if(q[0]===0&&q[1]===0)continue;var s2=priceDe(q[0],q[1]);if(o.indexOf(s2)<0)o.push(s2)}
+      out.push(C('Как сказать цену '+priceShow(p[0],p[1])+'?',o,o[0],{sayAnswer:o[0]}))}return out},
+  poss:function(g){var out=[],seen={},guard=0;while(out.length<g.n&&guard++<200){var o=OWNERS[rnd(0,OWNERS.length-1)],x=POSSN[rnd(0,POSSN.length-1)],k=o[0]+x[1];if(seen[k])continue;seen[k]=1;
+      var fem=x[0]==='die'||x[0]==='pl';var a=fem?(o[1]==='euer'?'eure':o[1]+'e'):o[1];var art=x[0]==='pl'?'die (мн. ч.)':x[0];
+      out.push(G('Чей? Владелец: '+o[0]+' — '+o[2]+'. Предмет: '+art+' '+x[1]+' — '+x[2]+'.',(x[0]==='pl'?'Das sind ___ ':'Das ist ___ ')+x[1]+'.',a,{kb:true,tr:x[2]+' — чей: '+o[2],explain:o[0]+' → '+o[1]+(fem?'; '+(x[0]==='pl'?'мн. ч.':'die')+' → '+a:'')+'.'}))}return out},
+  fem:function(g){return pick(JOBS,g.n).map(function(x){return T('Напиши женскую форму с артиклем: der '+x[0]+' ('+x[2]+')','die '+x[1],{kb:true,alt:[x[1]],explain:'der '+x[0]+' → die '+x[1]+'.'})})},
+  plural:function(g){return pick(pool(g,'animals').filter(function(x){return x[3]&&x[3]!=='pl'}),g.n).map(function(x){return T('Напиши множественное число с артиклем: '+x[0]+' '+x[1]+' ('+x[2]+')','die '+x[3],{kb:true,explain:x[0]+' '+x[1]+' → die '+x[3]+'.'})})},
+  mein:function(g){return pick(pool(g),g.n).map(function(x){var w=g.w||'mein';var a=x[0]==='die'?w+'e':w;var ru=w==='mein'?'мой / моя':'твой / твоя';
+      return C('Das ist ___ '+x[1]+'.',[w,w+'e'],a,{sub:ru+' · '+x[2]+' · '+x[0]+' '+x[1],sayAnswer:'Das ist '+a+' '+x[1]+'.',explain:x[0]+' '+x[1]+' → '+a+'. С der и das — '+w+', с die — '+w+'e.'})})}
+};
+
+/* ---------- curriculum ---------- */
+var UNITS=[
+{n:1,title:'Neu hier?',ru:'Новенькая?',pages:'с. 5–12',lessons:[
+ {id:'u1l1',title:'Привет и пока',items:[
+  RULE('Как здороваться и прощаться','<p>Для друзей и одноклассников: <b>Hallo!</b> — «привет».</p><p>Вежливо, например учительнице или соседке, по времени дня:</p><div class="ex"><b>Guten Morgen!</b> — доброе утро<br><b>Guten Tag!</b> — добрый день<br><b>Guten Abend!</b> — добрый вечер</div><p>Прощаться: <b>Tschüs!</b> — пока (друзьям), <b>Auf Wiedersehen!</b> — до свидания (вежливо), <b>Bis später!</b> — до скорого, <b>Bis morgen!</b> — до завтра.</p><p>Как дела: <b>Wie geht\'s?</b> — другу, <b>Wie geht es Ihnen?</b> — взрослому. Ответ: <b>Super!</b> <b>Gut, danke.</b> <b>Na ja, es geht.</b> (так себе). И спросить в ответ: <b>Und dir?</b> — а у тебя?</p>'),
+  L('Hallo!','Привет!'),L('Guten Morgen!','Доброе утро!'),L('Guten Tag!','Добрый день!'),L('Guten Abend!','Добрый вечер!'),
+  L('Tschüs!','Пока!'),L('Auf Wiedersehen!','До свидания!','Вежливо, взрослым.'),L('Bis später!','До скорого!'),L('Bis morgen!','До завтра!'),
+  L('Wie geht\'s?','Как дела?','Так спрашивают друга.'),L('Gut, danke. Und dir?','Хорошо, спасибо. А у тебя?'),L('Na ja, es geht.','Ну, так себе.'),
+  C('Утро. Ты заходишь в класс, там учительница. Что скажешь?',['Guten Morgen!','Tschüs!','Guten Abend!'],'Guten Morgen!',{explain:'Утром вежливо говорят Guten Morgen.'}),
+  C('Ты уходишь от подруги домой. Что скажешь?',['Tschüs!','Guten Tag!','Wie geht\'s?'],'Tschüs!',{explain:'Tschüs — «пока», для друзей.'}),
+  C('Послушай. Что это значит?',['До свидания','Добрый вечер','Как дела?'],'До свидания',{say:'Auf Wiedersehen!',hide:true}),
+  C('Послушай. Что это значит?',['Как дела?','Привет','До завтра'],'Как дела?',{say:'Wie geht\'s?',hide:true}),
+  C('Подруга спрашивает: «Wie geht\'s?» У тебя всё отлично. Что ответишь?',['Super!','Na ja, es geht.','Auf Wiedersehen!'],'Super!'),
+  T('Напиши по-немецки: «Добрый день!»','Guten Tag!',{kb:true,hint:'Два слова, оба с большой буквы.'}),
+  D('Hallo!','Hallo!','Привет!'),
+  T('Напиши по-немецки: «Пока!»',['Tschüs!','Tschüss!'],{kb:true,explain:'Пишут и Tschüs, и Tschüss — оба варианта верные.'}),
+  O('Собери: «Хорошо, спасибо. А у тебя?»','Gut, danke. Und dir?'),
+  D('Bis morgen!','Bis morgen!','До завтра!'),
+  T('Напиши по-немецки: «До свидания!»','Auf Wiedersehen!',{kb:true,hint:'Auf W…'})
+ ]},
+ {id:'u1l2',title:'Как тебя зовут? Откуда ты?',items:[
+  RULE('Три вопроса при знакомстве','<div class="ex"><b>Wie heißt du?</b> — Как тебя зовут? → <b>Ich heiße Carla.</b> или <b>Ich bin Carla.</b><br><b>Woher kommst du?</b> — Откуда ты? → <b>Ich komme aus Spanien.</b><br><b>Wo wohnst du?</b> — Где ты живёшь? → <b>Ich wohne in Köln.</b></div><p>Не перепутай: <b>wo</b> — где, <b>woher</b> — откуда, <b>wie</b> — как.</p><p>После <b>aus</b> — откуда ты родом. После <b>in</b> — где живёшь сейчас.</p><p>Глагол меняет окончание: с <b>ich</b> — <span class="hl">-e</span>, с <b>du</b> — <span class="hl">-st</span>.</p><div class="ex">ich komm<span class="hl">e</span> · du komm<span class="hl">st</span><br>ich wohn<span class="hl">e</span> · du wohn<span class="hl">st</span><br>ich heiß<span class="hl">e</span> · du heiß<span class="hl">t</span> (тут только -t: ß уже звучит как «с»)<br>ich <b>bin</b> · du <b>bist</b> (глагол sein — «быть»)</div><p>В вопросе со словом <b>wie / wo / woher</b> глагол стоит <b>вторым</b>: Wo <u>wohnst</u> du?</p>'),
+  L('Bist du neu hier? — Ja.','Ты здесь новенькая? — Да.'),
+  L('Wie heißt du?','Как тебя зовут?'),L('Ich heiße Carla.','Меня зовут Карла.'),L('Wer bist du? — Ich bin Oskar.','Ты кто? — Я Оскар.'),
+  L('Woher kommst du?','Откуда ты?'),L('Ich komme aus Serbien.','Я из Сербии.'),
+  L('Wo wohnst du?','Где ты живёшь?'),L('Ich wohne in Pančevo.','Я живу в Панчево.'),L('Und du?','А ты?'),
+  C('Как спросить «Где ты живёшь?»',['Wo wohnst du?','Woher kommst du?','Wie heißt du?'],'Wo wohnst du?',{sayAnswer:'Wo wohnst du?'}),
+  C('___ kommst du? — Aus Köln.',['Woher','Wo','Wie'],'Woher',{explain:'Ответ «из Кёльна» — значит спрашивали «откуда»: woher.',sayAnswer:'Woher kommst du?'}),
+  C('___ wohnst du? — In Berlin.',['Wo','Woher','Wie'],'Wo',{explain:'Ответ «в Берлине» — значит «где»: wo.',sayAnswer:'Wo wohnst du?'}),
+  C('___ heißt du? — Ich heiße Lena.',['Wie','Wo','Woher'],'Wie',{sayAnswer:'Wie heißt du?'}),
+  G('Я из Сербии.','Ich ___ aus Serbien.','komme',{explain:'ich → -e: ich komme.'}),
+  G('Где ты живёшь?','Wo ___ du?','wohnst',{explain:'du → -st: du wohnst.'}),
+  G('Как тебя зовут?','Wie ___ du?','heißt',{explain:'heißen с du: du heißt (без лишней s).',kb:true}),
+  G('Ты новенькая?','___ du neu hier?','Bist',{explain:'sein с du: du bist. Вопрос «да/нет» начинается с глагола.'}),
+  GEN('conj',{verbs:['kommen','wohnen','heißen','sein'],prons:[0,1],n:4}),
+  O('Собери: «Откуда ты?»','Woher kommst du?'),
+  O('Собери: «Меня зовут Оскар.»','Ich heiße Oskar.'),
+  O('Собери: «Я живу в Кёльне.»','Ich wohne in Köln.'),
+  D('Woher kommst du?','Woher kommst du?','Откуда ты?'),
+  T('Напиши по-немецки: «Я из Сербии.»','Ich komme aus Serbien.',{kb:true}),
+  F('Напиши о себе, как тебя зовут. Начни с «Ich heiße …»',/^ich (heiße|heisse|bin) \S+/i,'Ich heiße Anna.')
+ ]},
+ {id:'u1l3',title:'Алфавит и буквы с точками',items:[
+  RULE('Как называются буквы','<p>Немцы часто просят продиктовать имя по буквам: <b>Wie schreibt man das?</b> — Как это пишется? Если не расслышала: <b>Wie bitte?</b> — Что, простите?</p><p>Большинство букв звучат почти как по-русски, но эти легко перепутать:</p><div class="tablewrap"><table><tr><th>буква</th><th>как называется</th></tr><tr><td>E</td><td>«э»</td></tr><tr><td>H</td><td>«ха»</td></tr><tr><td>I</td><td>«и»</td></tr><tr><td>J</td><td>«йот»</td></tr><tr><td>V</td><td>«фау»</td></tr><tr><td>W</td><td>«вэ»</td></tr><tr><td>Y</td><td>«ипсилон»</td></tr><tr><td>Z</td><td>«цэт»</td></tr></table></div><p>И ещё четыре особые буквы: <b>ä, ö, ü</b> (Umlaute — «а, о, у с точками») и <b>ß</b> («эсцет», звучит как «сс»). Например: <b>Köln</b>, <b>München</b>, <b>Tschüs</b>, <b>heißen</b>, <b>Fußball</b>.</p><p>В заданиях под полем ввода есть кнопки <b>ä ö ü ß</b>.</p>'),
+  L('Wie schreibt man das?','Как это пишется?'),L('Wie bitte?','Что, простите? (переспросить)'),
+  L('L-O-H-B-A-C-H','Lohbach — так диктуют фамилию по буквам'),
+  C('Послушай букву. Какая это?',['V','F','W'],'V',{say:'V',hide:true,explain:'V называется «фау».'}),
+  C('Послушай букву. Какая это?',['W','V','B'],'W',{say:'W',hide:true,explain:'W называется «вэ».'}),
+  C('Послушай букву. Какая это?',['Z','C','S'],'Z',{say:'Z',hide:true,explain:'Z называется «цэт».'}),
+  C('Послушай букву. Какая это?',['J','G','Y'],'J',{say:'J',hide:true,explain:'J называется «йот».'}),
+  C('Послушай букву. Какая это?',['H','A','K'],'H',{say:'H',hide:true,explain:'H называется «ха».'}),
+  C('Послушай букву. Какая это?',['E','I','A'],'E',{say:'E',hide:true,explain:'E называется «э», а I — «и».'}),
+  D('L, O, H, B, A, C, H','Lohbach','Фамилия по буквам. Напиши её.',{slow:true}),
+  D('O, T, A, V, I, O','Otavio','Имя по буквам. Напиши его.',{slow:true}),
+  D('W, I, E, N','Wien','Город по буквам (Вена).',{slow:true}),
+  D('J, U, L, I, A','Julia','Имя по буквам.',{slow:true}),
+  T('Напиши по-немецки: «Мюнхен»','München',{kb:true,hint:'Mü…'}),
+  T('Напиши по-немецки: «Кёльн»','Köln',{kb:true}),
+  T('Напиши по-немецки: «футбол»','Fußball',{kb:true,hint:'В середине ß. Существительное — с большой буквы.'}),
+  T('Напиши по-немецки: «Австрия»','Österreich',{kb:true,hint:'Ö…'}),
+  C('Ты не расслышала, что сказала учительница. Что скажешь?',['Wie bitte?','Wie heißt du?','Tschüs!'],'Wie bitte?')
+ ]},
+ {id:'u1l4',title:'Вежливо: Sie',items:[
+  RULE('du или Sie','<p><b>du</b> — «ты»: друзьям, одноклассникам, семье.</p><p><b>Sie</b> — «Вы»: учителям и незнакомым взрослым. Пишется <b>всегда с большой буквы</b>.</p><p>С <b>Sie</b> глагол выглядит как в словаре, на <span class="hl">-en</span>:</p><div class="ex">du heißt → Sie heiß<span class="hl">en</span><br>du wohnst → Sie wohn<span class="hl">en</span><br>du kommst → Sie komm<span class="hl">en</span><br>du bist → Sie <b>sind</b></div><div class="ex"><b>Wie heißen Sie?</b> — Как Вас зовут?<br><b>Wie geht es Ihnen?</b> — Как у Вас дела?<br><b>Herr</b> Lohbach — господин Лобах, <b>Frau</b> Meier — госпожа Майер</div><p>Слова из анкеты (<b>Anmeldung</b>): <b>Vorname</b> — имя, <b>Familienname</b> — фамилия, <b>Straße</b> — улица, <b>Wohnort</b> — город, где живёшь, <b>Land</b> — страна.</p>'),
+  L('Wie heißen Sie?','Как Вас зовут?'),L('Wo wohnen Sie, Herr Lohbach?','Где Вы живёте, господин Лобах?'),L('Woher kommen Sie?','Откуда Вы?'),
+  L('Wie geht es Ihnen?','Как у Вас дела?'),L('Danke, gut. Und Ihnen?','Спасибо, хорошо. А у Вас?'),L('Willkommen!','Добро пожаловать!'),
+  L('der Vorname','имя'),L('der Familienname','фамилия'),L('die Straße','улица'),L('der Wohnort','город (где живёшь)'),L('das Land','страна'),
+  C('Ты говоришь с учительницей. Как к ней обращаться?',['Sie','du'],'Sie'),
+  C('Ты говоришь с одноклассником.',['du','Sie'],'du'),
+  C('Ты говоришь с врачом.',['Sie','du'],'Sie'),
+  C('Ты говоришь с младшим братом.',['du','Sie'],'du'),
+  G('Как Вас зовут?','Wie ___ Sie?','heißen',{kb:true}),
+  G('Где Вы живёте?','Wo ___ Sie?','wohnen'),
+  G('Вы господин Лобах?','___ Sie Herr Lohbach?','Sind',{explain:'sein с Sie: Sie sind.'}),
+  GEN('conj',{verbs:['kommen','wohnen','heißen','sein'],prons:[1,6],n:4}),
+  T('Сделай вопрос вежливым: «Wie heißt du?»','Wie heißen Sie?',{kb:true}),
+  T('Сделай вопрос вежливым: «Woher kommst du?»','Woher kommen Sie?',{kb:true}),
+  C('«Familienname» — это…',['фамилия','имя','улица'],'фамилия',{sayAnswer:'der Familienname'}),
+  T('Напиши по-немецки: «улица»','Straße',{kb:true,explain:'die Straße. Существительное — с большой буквы, в середине ß.'}),
+  T('Напиши по-немецки: «имя» (в анкете)','Vorname',{kb:true}),
+  C('Учительница: «Guten Tag! Wie geht es dir?» Ответь и вежливо спроси в ответ.',['Gut, danke. Und Ihnen?','Gut, danke. Und dir?','Tschüs!'],'Gut, danke. Und Ihnen?',{explain:'Учительнице в ответ — вежливо: Und Ihnen? А Und dir? — только друзьям.'}),
+  D('Wie heißen Sie?','Wie heißen Sie?','Как Вас зовут?')
+ ]},
+ {id:'u1l5',title:'Что ты любишь?',items:[
+  RULE('Глагол mögen — «любить, нравиться»','<div class="ex">ich <b>mag</b> · du <b>magst</b> · Sie <b>mögen</b></div><p><b>Ich mag Tennis.</b> — Я люблю теннис.<br><b>Ich mag Judo und Schwimmen.</b> — Я люблю дзюдо и плавание.<br><b>Ich mag auch Musik.</b> — Я ещё люблю музыку. (auch — тоже, ещё)</p><p>Два вида вопросов:</p><div class="ex"><b>Was magst du?</b> — Что ты любишь? (с вопросительным словом глагол <b>второй</b>)<br><b>Magst du Fußball?</b> — Ты любишь футбол? (вопрос «да/нет» — глагол <b>первый</b>)<br>Ответ: <b>Ja, sehr.</b> — Да, очень. / <b>Nein.</b> — Нет.</div>'),
+  L('Was magst du?','Что ты любишь?'),L('Ich mag Tennis.','Я люблю теннис.'),L('Magst du Fußball? — Ja, sehr.','Ты любишь футбол? — Да, очень.'),
+  L('Ich mag auch Musik.','Я ещё люблю музыку.'),
+  L('Schwimmen','плавание'),L('Tischtennis','настольный теннис'),L('Radfahren','кататься на велосипеде'),L('Kino','кино'),L('Gitarre','гитара'),L('Partys und Chats','вечеринки и чаты'),
+  GEN('conj',{verbs:['mögen'],prons:[0,1,6],n:3}),
+  G('Ты любишь карате?','___ du Karate?','Magst'),
+  G('Я люблю дзюдо.','Ich ___ Judo.','mag'),
+  O('Собери: «Ты любишь теннис?»','Magst du Tennis?'),
+  O('Собери: «Я люблю дзюдо и плавание.»','Ich mag Judo und Schwimmen.'),
+  C('Где стоит глагол в вопросе «да/нет»?',['На первом месте','На втором месте','В конце'],'На первом месте',{explain:'Magst du Tennis? — глагол первый. Was magst du? — глагол второй.'}),
+  R('Schüler-Chat','Hallo, ich heiße Chrissie und wohne in München. Ich mag Fußball und Tennis.\n\nServus, ich bin Matthias. Ich komme aus Österreich, aus Wien. Ich mag Kino, Partys und Musik.','Школьный чат из учебника, с. 10. Прочитай и послушай. Servus — «привет» в Австрии.'),
+  C('Где живёт Chrissie?',['in München','in Wien','in Berlin'],'in München',{ctx:1}),
+  C('Что любит Chrissie?',['Fußball und Tennis','Kino und Musik','Karate'],'Fußball und Tennis',{ctx:1}),
+  C('Откуда Matthias?',['aus Österreich','aus Deutschland','aus der Schweiz'],'aus Österreich',{ctx:1}),
+  T('Напиши по-немецки: «Я люблю музыку.»','Ich mag Musik.',{kb:true}),
+  D('Magst du Tischtennis?','Magst du Tischtennis?','Ты любишь настольный теннис?'),
+  F('Напиши, что любишь ты. Начни с «Ich mag …»',/^ich mag \S+/i,'Ich mag Musik und Kino.')
+ ]},
+ {id:'u1t',title:'Проверь себя: тема 1',test:true,size:16}
+]},
+{n:2,title:'Meine Klasse',ru:'Мой класс',pages:'с. 13–20',lessons:[
+ {id:'u2l1',title:'Числа 0–20',items:[
+  RULE('Считаем до 20','<div class="tablewrap"><table><tr><td>0 null</td><td>5 fünf</td><td>10 zehn</td><td>15 fünfzehn</td></tr><tr><td>1 eins</td><td>6 sechs</td><td>11 elf</td><td>16 <b>sech</b>zehn</td></tr><tr><td>2 zwei</td><td>7 sieben</td><td>12 zwölf</td><td>17 <b>sieb</b>zehn</td></tr><tr><td>3 drei</td><td>8 acht</td><td>13 dreizehn</td><td>18 achtzehn</td></tr><tr><td>4 vier</td><td>9 neun</td><td>14 vierzehn</td><td>19 neunzehn</td></tr></table></div><p>20 — <b>zwanzig</b>.</p><p>13–19 строятся как в русском: «три-на-дцать» = <b>drei</b> + <b>zehn</b>. Две ловушки: 16 — <b>sechzehn</b> (без s), 17 — <b>siebzehn</b> (без en).</p><p>Как читать: <b>ei</b> = «ай» (zwei, drei), <b>ie</b> = долгое «и» (vier, sieben), <b>z</b> = «ц» (zehn), <b>v</b> = «ф» (vier).</p><p><b>Wie ist deine Handynummer?</b> — Какой у тебя номер телефона? Номер диктуют по одной цифре.</p>'),
+  L('eins, zwei, drei, vier, fünf','1, 2, 3, 4, 5'),L('sechs, sieben, acht, neun, zehn','6, 7, 8, 9, 10'),L('elf, zwölf','11, 12'),L('sechzehn, siebzehn','16, 17 — запомни написание'),L('zwanzig','20'),
+  GEN('numHear',{min:0,max:20,n:6}),
+  GEN('numWrite',{min:0,max:12,n:3}),
+  GEN('numWrite',{min:13,max:20,n:3}),
+  C('Как пишется 16?',['sechzehn','sechszehn','sechzen'],'sechzehn',{sayAnswer:'sechzehn'}),
+  C('Как пишется 17?',['siebzehn','siebenzehn','sibzehn'],'siebzehn',{sayAnswer:'siebzehn'}),
+  D('null, eins, sechs, vier, fünf, sieben, sieben','0164577','Это номер телефона. Напиши цифрами.',{digits:true,slow:true}),
+  D('null, eins, fünf, sieben, drei, acht, zwei','0157382','Ещё один номер. Напиши цифрами.',{digits:true,slow:true}),
+  L('Wie ist deine Handynummer?','Какой у тебя номер мобильного?')
+ ]},
+ {id:'u2l2',title:'Числа до 1000',items:[
+  RULE('Десятки, сотни и «наоборот»','<div class="tablewrap"><table><tr><td>30 drei<b>ß</b>ig</td><td>40 vierzig</td><td>50 fünfzig</td></tr><tr><td>60 <b>sech</b>zig</td><td>70 <b>sieb</b>zig</td><td>80 achtzig</td></tr><tr><td>90 neunzig</td><td>100 (ein)hundert</td><td>1000 (ein)tausend</td></tr></table></div><p>Главное правило: от 21 до 99 сначала говорят <b>единицы</b>, потом <b>десятки</b>, а между ними <b>und</b> («и»):</p><div class="ex">21 = <b>ein</b>und<b>zwanzig</b> («один-и-двадцать»)<br>35 = <b>fünf</b>und<b>dreißig</b><br>99 = <b>neun</b>und<b>neunzig</b></div><p>Всё число пишется <b>одним словом</b>.</p><p>Сотни просто ставят впереди: 200 = <b>zweihundert</b>, 101 = <b>hunderteins</b>, 345 = <b>dreihundertfünfundvierzig</b>.</p><p>Ловушка на слух: 23 (dreiundzwanzig) и 32 (zweiunddreißig) легко перепутать. Первая цифра, которую слышишь, — последняя в записи.</p>'),
+  L('einundzwanzig','21'),L('zweiunddreißig','32'),L('fünfundvierzig','45'),L('hundert','100'),L('dreihundertfünfundvierzig','345'),
+  O('Собери число 45',' fünfundvierzig',{tiles:['fünf','und','vierzig','vier'],join:true,a:'fünfundvierzig'}),
+  O('Собери число 23',' dreiundzwanzig',{tiles:['drei','und','zwanzig','dreißig'],join:true,a:'dreiundzwanzig'}),
+  GEN('numHear',{min:21,max:99,n:5}),
+  GEN('numWrite',{min:21,max:99,n:4}),
+  C('Послушай. Какое это число?',['32','23','22'],'32',{say:'zweiunddreißig',hide:true,explain:'zwei-und-dreißig: два и тридцать = 32.'}),
+  C('Послушай. Какое это число?',['67','76','66'],'67',{say:'siebenundsechzig',hide:true,explain:'sieben-und-sechzig: семь и шестьдесят = 67.'}),
+  GEN('numHear',{min:100,max:999,n:3}),
+  GEN('numWrite',{min:100,max:999,n:2})
+ ]},
+ {id:'u2l3',title:'Школьные предметы',items:[
+  RULE('Предметы и как сказать «нравится / не нравится»','<p>Предметы: <b>Mathe</b> — математика, <b>Deutsch</b> — немецкий, <b>Englisch</b> — английский, <b>Sport</b> — физкультура, <b>Bio</b> — биология, <b>Musik</b> — музыка, <b>Kunst</b> — рисование, <b>Geschichte</b> — история, <b>Erdkunde</b> — география.</p><div class="ex"><b>Magst du Bio?</b><br>Нравится: <b>Ja, sehr. Bio ist super / toll.</b><br>Так себе: <b>Na ja, es geht.</b><br>Не нравится: <b>Nein, ich mag Bio nicht. Bio ist langweilig / blöd.</b></div><p><b>nicht</b> («не») ставят в <b>конец</b>: Ich mag Sport <b>nicht</b>.</p><p><b>langweilig</b> — скучный, <b>blöd</b> — дурацкий, <b>toll</b> — классный. <b>Ich nicht, aber ich mag Kunst.</b> — Я нет, но я люблю рисование.</p>'),
+  L('Mathe','математика'),L('Deutsch','немецкий язык'),L('Englisch','английский язык'),L('Sport','физкультура'),L('Bio','биология'),
+  L('Musik','музыка'),L('Kunst','рисование'),L('Geschichte','история'),L('Erdkunde','география'),
+  L('Mathe ist super!','Математика — супер!'),L('Bio ist langweilig.','Биология скучная.'),L('Ich mag Sport nicht.','Я не люблю физкультуру.'),
+  C('«Erdkunde» — это…',['география','история','рисование'],'география',{sayAnswer:'Erdkunde'}),
+  C('«Geschichte» — это…',['история','география','музыка'],'история',{sayAnswer:'Geschichte'}),
+  C('«Kunst» — это…',['рисование','физкультура','немецкий'],'рисование',{sayAnswer:'Kunst'}),
+  C('Послушай. Это хорошо или плохо?',['скучно','классно','так себе'],'скучно',{say:'Bio ist langweilig.',hide:true}),
+  G('Я не люблю математику.','Ich mag Mathe ___.','nicht',{explain:'nicht ставят в конец.'}),
+  O('Собери: «Я не люблю биологию.»','Ich mag Bio nicht.'),
+  O('Собери: «Ты любишь английский?»','Magst du Englisch?'),
+  T('Напиши по-немецки: «история» (предмет)','Geschichte',{kb:true}),
+  T('Напиши по-немецки: «Музыка — классная!»',['Musik ist toll!','Musik ist super!'],{kb:true}),
+  R('Die Neue','Jasmin: Hallo, Marco. Ich bin neu hier.\nMarco: Woher kommst du?\nJasmin: Ich komme aus München. Aber jetzt wohne ich in Ulm. Was ist jetzt?\nMarco: Bio. Magst du Bio?\nJasmin: Ja, sehr. Und du? Magst du Bio auch?\nMarco: Nein, ich mag Bio nicht. Bio ist langweilig. Ich mag Mathe.','Диалог из учебника, с. 14. «Die Neue» — новенькая. aber — но, jetzt — сейчас.'),
+  C('Откуда Jasmin?',['aus München','aus Ulm','aus Köln'],'aus München',{ctx:1}),
+  C('Где Jasmin живёт сейчас?',['in Ulm','in München','in Berlin'],'in Ulm',{ctx:1}),
+  C('Что Marco думает о биологии?',['скучная','классная','так себе'],'скучная',{ctx:1}),
+  F('Напиши, какой предмет ты любишь. «Ich mag …»',/^ich mag \S+/i,'Ich mag Kunst und Englisch.')
+ ]},
+ {id:'u2l4',title:'Это мой друг',items:[
+  RULE('Рассказать о друге: er и sie','<div class="ex"><b>Das ist mein Freund Jonas.</b> — Это мой друг Йонас.<br><b>Er</b> spielt Tennis. — <b>Он</b> играет в теннис.<br><b>Das ist meine Freundin Emma.</b> — Это моя подруга Эмма.<br><b>Sie</b> kommt aus Hamburg. — <b>Она</b> из Гамбурга.</div><p><b>er</b> — он, <b>sie</b> — она. С ними глагол на <span class="hl">-t</span>:</p><div class="ex">er komm<span class="hl">t</span> · sie wohn<span class="hl">t</span> · er spiel<span class="hl">t</span> · sie heiß<span class="hl">t</span><br>исключения: er/sie <b>ist</b> (sein), er/sie <b>mag</b> (mögen — без -t!)</div><p><b>der Freund</b> — друг → <b>mein</b> Freund. <b>die Freundin</b> — подруга → <b>meine</b> Freundin.</p><p><b>gern</b> — охотно: Er spielt <b>gern</b> Tennis. — Он любит играть в теннис.</p>'),
+  L('Das ist mein Freund Jonas.','Это мой друг Йонас.'),L('Er spielt gern Tennis.','Он любит играть в теннис.'),
+  L('Das ist meine Freundin Emma.','Это моя подруга Эмма.'),L('Sie kommt aus Hamburg.','Она из Гамбурга.'),L('Sie mag Rap-Musik.','Ей нравится рэп.'),
+  GEN('conj',{verbs:['kommen','wohnen','heißen','spielen','mögen','sein'],prons:[2],n:5}),
+  G('Меня зовут Мориц Бринк.','Ich ___ Moritz Brink.','heiße',{kb:true}),
+  G('Это мой друг Йонас.','Das ___ mein Freund Jonas.','ist'),
+  G('Он любит играть в теннис.','Er ___ gern Tennis.','spielt'),
+  G('Она из Гамбурга.','Sie ___ aus Hamburg.','kommt'),
+  G('Она сейчас живёт здесь, в Ульме.','Sie ___ jetzt hier in Ulm.','wohnt'),
+  C('Das ist ___ Freund.',['mein','meine'],'mein',{explain:'der Freund → mein.'}),
+  C('Das ist ___ Freundin.',['meine','mein'],'meine',{explain:'die Freundin → meine.'}),
+  R('Pause','Lena: Hallo, Jasmin, ich bin Lena.\nJasmin: Hallo, Lena.\nLena: Das ist Marie. Sie ist meine Freundin. Sie mag Rap-Musik.\nJasmin: Hallo, Marie, ich mag Rap-Musik auch.\nLena: Und das ist mein Freund Ole. Er spielt Fußball.','Диалог из учебника, с. 15.'),
+  C('Кто такая Marie?',['подруга Лены','сестра Лены','учительница'],'подруга Лены',{ctx:1}),
+  C('Что любит Marie?',['Rap-Musik','Fußball','Tennis'],'Rap-Musik',{ctx:1}),
+  O('Собери: «Это моя подруга.»','Das ist meine Freundin.'),
+  T('Напиши по-немецки: «Он живёт в Берлине.»','Er wohnt in Berlin.',{kb:true}),
+  F('Расскажи о друге или подруге. Начни с «Das ist mein Freund …» или «Das ist meine Freundin …»',/^das ist (mein|meine) \S+/i,'Das ist meine Freundin Mila. Sie mag Musik.')
+ ]},
+ {id:'u2l5',title:'Глаголы целиком',items:[
+  RULE('Все лица глагола','<p>Теперь вся таблица. Окончания одинаковые почти у всех глаголов:</p><div class="tablewrap"><table><tr><th></th><th>окончание</th><th>wohnen</th><th>sein</th><th>mögen</th></tr><tr><td>ich — я</td><td>-e</td><td>wohne</td><td>bin</td><td>mag</td></tr><tr><td>du — ты</td><td>-st</td><td>wohnst</td><td>bist</td><td>magst</td></tr><tr><td>er/sie/es — он/она/оно</td><td>-t</td><td>wohnt</td><td>ist</td><td>mag</td></tr><tr><td>wir — мы</td><td>-en</td><td>wohnen</td><td>sind</td><td>mögen</td></tr><tr><td>ihr — вы (друзья)</td><td>-t</td><td>wohnt</td><td>seid</td><td>mögt</td></tr><tr><td>sie — они</td><td>-en</td><td>wohnen</td><td>sind</td><td>mögen</td></tr><tr><td>Sie — Вы</td><td>-en</td><td>wohnen</td><td>sind</td><td>mögen</td></tr></table></div><p><b>sie</b> может значить «она», «они» или «Вы». Подсказка — глагол: <b>sie wohnt</b> = она, <b>sie wohnen</b> = они, <b>Sie wohnen</b> (с большой) = Вы.</p><p><b>ihr</b> — это «вы», когда говоришь нескольким друзьям: <b>Was macht ihr?</b> — Что вы делаете?</p>'),
+  L('Wir spielen zusammen Fußball.','Мы вместе играем в футбол.'),L('Was macht ihr heute Nachmittag?','Что вы делаете сегодня после обеда?'),L('Keine Ahnung.','Без понятия.'),
+  GEN('conj',{verbs:['wohnen','machen','spielen','kommen'],prons:[0,1,2,3,4,5,6],n:6}),
+  GEN('conj',{verbs:['sein','mögen','heißen'],prons:[0,1,2,3,4,5],n:5}),
+  G('Мы вместе играем в футбол.','Wir ___ zusammen Fußball.','spielen'),
+  G('Что вы делаете?','Was ___ ihr?','macht'),
+  G('Клара и Пауль любят рок.','Clara und Paul ___ Rock-Musik.','mögen',{kb:true,explain:'Clara und Paul = sie (они) → mögen.'}),
+  G('Вы мои друзья.','Ihr ___ meine Freunde.','seid'),
+  C('«Sie wohnen in Ulm» (Sie с большой буквы) — это…',['Вы живёте в Ульме','Она живёт в Ульме','Ты живёшь в Ульме'],'Вы живёте в Ульме'),
+  C('«sie wohnt in Ulm» — это…',['она живёт в Ульме','они живут в Ульме','Вы живёте в Ульме'],'она живёт в Ульме',{explain:'wohnt на -t — значит одна: «она».'}),
+  C('«sie spielen Gitarre» — это…',['они играют на гитаре','она играет на гитаре','ты играешь на гитаре'],'они играют на гитаре',{explain:'spielen на -en и sie с маленькой — «они».'}),
+  O('Собери: «Что вы делаете сегодня после обеда?»','Was macht ihr heute Nachmittag?'),
+  T('Напиши по-немецки: «Мы живём в Панчево.»','Wir wohnen in Pančevo.',{kb:true,explain:'Wir wohnen in Pančevo. (Букву č можно набрать и как c.)',alt:['Wir wohnen in Pancevo.']})
+ ]},
+ {id:'u2l6',title:'Школьные вещи: der, das, die',items:[
+  RULE('Артикль — часть слова','<p>У каждого немецкого существительного есть артикль:</p><div class="ex"><span class="art-der"><b>der</b></span> — мужской род · <span class="art-das"><b>das</b></span> — средний · <span class="art-die"><b>die</b></span> — женский</div><p>Род часто <b>не совпадает</b> с русским: <span class="art-das">das</span> Buch (а «книга» — женского рода), <span class="art-die">die</span> Schere (а «ножницы» — вообще множественное число).</p><p>Поэтому слово учат сразу с артиклем, как одно целое: не «Kuli», а «<span class="art-der">der</span> Kuli». Цвета здесь как в учебнике: der — синий, das — зелёный, die — красный.</p><p>Существительные в немецком <b>всегда пишутся с большой буквы</b>.</p><p><b>Wie heißt das auf Deutsch?</b> — Как это по-немецки?</p>'),
+ ].concat(NOUNS.map(function(x){return L(x[0]+' '+x[1],x[2])})).concat([
+  GEN('art',{n:10}),
+  GEN('artType',{n:5}),
+  C('Как правильно?',['das Buch','der Buch','die Buch'],'das Buch',{sayAnswer:'das Buch',explain:'das Buch — средний род, хотя «книга» по-русски женского.'}),
+  C('Как правильно?',['die Schere','der Schere','das Schere'],'die Schere',{sayAnswer:'die Schere'}),
+  D('Wie heißt das auf Deutsch?','Wie heißt das auf Deutsch?','Как это по-немецки?')
+ ])},
+ {id:'u2l7',title:'ein, eine, mein, dein',items:[
+  RULE('Неопределённый артикль и «мой / твой»','<p>Когда говоришь «это какой-то предмет», вместо der/das/die ставят <b>ein</b> или <b>eine</b>:</p><div class="ex"><span class="art-der">der</span> Kuli → <b>ein</b> Kuli → <b>mein</b> Kuli → <b>dein</b> Kuli<br><span class="art-das">das</span> Buch → <b>ein</b> Buch → <b>mein</b> Buch → <b>dein</b> Buch<br><span class="art-die">die</span> Schere → <b>eine</b> Schere → <b>meine</b> Schere → <b>deine</b> Schere</div><p>Правило одно: у слов с <span class="art-die">die</span> на конце появляется <span class="hl">-e</span>.</p><div class="ex"><b>Was ist das?</b> — Что это?<br><b>Ist das ein Bleistift?</b> — Это карандаш?<br><b>Nein, das ist ein Kuli. Das ist mein Kuli.</b> — Нет, это ручка. Это моя ручка.</div>'),
+  L('Was ist das?','Что это?'),L('Ist das ein Bleistift?','Это карандаш?'),L('Nein, das ist ein Kuli.','Нет, это ручка.'),L('Das ist mein Lineal.','Это моя линейка.'),L('Das ist deine Schere.','Это твои ножницы.'),
+  GEN('ein',{n:6}),
+  GEN('mein',{n:4,w:'mein'}),
+  GEN('mein',{n:2,w:'dein'}),
+  O('Собери: «Это мой карандаш.»','Das ist mein Bleistift.'),
+  O('Собери: «Это ластик?»','Ist das ein Radiergummi?'),
+  T('Напиши по-немецки: «Это ножницы.»','Das ist eine Schere.',{kb:true}),
+  T('Напиши по-немецки: «Это моя тетрадь.»','Das ist mein Heft.',{kb:true,explain:'das Heft → mein Heft (без -e, потому что das).'}),
+  D('Ist das ein Kuli?','Ist das ein Kuli?','Это ручка?'),
+  D('Das ist meine Brille.','Das ist meine Brille.','Это мои очки.')
+ ]},
+ {id:'u2t',title:'Проверь себя: тема 2',test:true,size:18}
+]},{n:3,title:'Tiere',ru:'Животные',pages:'с. 21–28',lessons:[
+ {id:'u3l1',title:'Животные и их артикли',items:[
+  RULE('Животные — тоже с артиклем','<p>Как и со школьными вещами, животное учим сразу с артиклем. Род часто не такой, как в русском:</p><div class="ex"><span class="art-der">der</span> Hund — собака (в русском женский род)<br><span class="art-die">die</span> Spinne — паук (в русском мужской)<br><span class="art-das">das</span> Pferd — лошадь<br><span class="art-das">das</span> Kaninchen — кролик</div><p>Слова на <b>-chen</b> всегда <span class="art-das">das</span>: das Kaninchen, das Meerschweinchen.</p><div class="ex"><b>Was ist dein Lieblingstier?</b> — Какое твоё любимое животное?<br><b>Mein Lieblingstier ist der Tiger.</b> — Моё любимое животное — тигр.<br><b>Das Haustier</b> — домашнее животное.</div>'),
+ ].concat(ANIMALS.map(function(x){return L(x[0]+' '+x[1],x[2])})).concat([
+  L('Was ist dein Lieblingstier?','Какое твоё любимое животное?'),L('Mein Lieblingstier ist das Pferd.','Моё любимое животное — лошадь.'),
+  GEN('art',{n:10,list:'animals'}),
+  C('Как правильно?',['der Hund','die Hund','das Hund'],'der Hund',{sayAnswer:'der Hund',explain:'der Hund — мужской род, хотя «собака» по-русски женского.'}),
+  C('Как правильно?',['die Spinne','der Spinne','das Spinne'],'die Spinne',{sayAnswer:'die Spinne'}),
+  C('Послушай. Какое это животное?',['кролик','корова','черепаха'],'кролик',{say:'das Kaninchen',hide:true}),
+  C('Послушай. Какое это животное?',['морская свинка','мышь','хомяк'],'морская свинка',{say:'das Meerschweinchen',hide:true}),
+  GEN('artType',{n:5,list:'animals'}),
+  O('Собери: «Моё любимое животное — тигр.»','Mein Lieblingstier ist der Tiger.'),
+  F('Напиши своё любимое животное: «Mein Lieblingstier ist …»',/^mein lieblingstier ist (der|das|die) \S+/i,'Mein Lieblingstier ist die Katze.')
+ ])},
+ {id:'u3l2',title:'Hast du ein Haustier?',items:[
+  RULE('Глагол haben — «иметь»','<p>По-русски «у меня есть», по-немецки «я имею»: <b>Ich habe eine Katze.</b> — У меня есть кошка.</p><div class="tablewrap"><table><tr><td>ich habe</td><td>wir haben</td></tr><tr><td>du <b>hast</b></td><td>ihr habt</td></tr><tr><td>er/sie/es <b>hat</b></td><td>sie/Sie haben</td></tr></table></div><p>Внимание: <b>du hast</b> и <b>er hat</b> — без буквы b.</p><div class="ex"><b>Hast du ein Haustier?</b> — У тебя есть домашнее животное?<br><b>Ja, ich habe eine Katze.</b> — Да, у меня есть кошка.</div><p>Возраст говорят через <b>sein</b> + <b>Jahre alt</b>:</p><div class="ex"><b>Wie alt bist du?</b> — Сколько тебе лет?<br><b>Ich bin zwölf Jahre alt.</b> — Мне 12 лет.<br><b>Er ist ein Jahr alt.</b> — Ему один год.</div>'),
+  L('Hast du ein Haustier?','У тебя есть домашнее животное?'),L('Ja, ich habe eine Katze.','Да, у меня есть кошка.'),
+  L('Wie alt bist du?','Сколько тебе лет?'),L('Ich bin zwölf Jahre alt.','Мне двенадцать лет.'),L('Er ist zwanzig Jahre alt.','Ему двадцать лет.'),
+  GEN('conj',{verbs:['haben'],prons:[0,1,2,3,4,5,6],n:6}),
+  G('У тебя есть хомяк?','___ du einen Hamster?','Hast'),
+  G('У Дрины есть кошка.','Drina ___ eine Katze.','hat'),
+  G('Сколько тебе лет?','Wie alt ___ du?','bist'),
+  G('Мне двенадцать лет.','Ich bin zwölf ___ alt.','Jahre'),
+  R('Haustiere','Milan: Hast du ein Haustier, Drina?\nDrina: Ja, ich habe eine Katze.\nMilan: Hast du auch einen Hund?\nDrina: Nein, ich habe keinen Hund. Und du?\nMilan: Ich habe einen Hund und einen Papagei.\nDrina: Einen Papagei? Super. Ist der schon alt?\nMilan: Ja, er ist 20 Jahre alt.\nDrina: Und dein Hund?','Диалог из учебника, с. 23. schon — уже.'),
+  C('Какое животное есть у Дрины?',['кошка','собака','попугай'],'кошка',{ctx:1}),
+  C('У Дрины есть собака?',['нет','да'],'нет',{ctx:1}),
+  C('Кто есть у Милана?',['собака и попугай','кошка и паук','только кошка'],'собака и попугай',{ctx:1}),
+  C('Сколько лет попугаю?',['20','12','3'],'20',{ctx:1}),
+  O('Собери: «У тебя есть домашнее животное?»','Hast du ein Haustier?'),
+  T('Напиши по-немецки: «Мне двенадцать лет.»',['Ich bin zwölf Jahre alt.','Ich bin 12 Jahre alt.'],{kb:true}),
+  D('Hast du ein Haustier?','Hast du ein Haustier?','У тебя есть домашнее животное?'),
+  F('Напиши, сколько тебе лет: «Ich bin … Jahre alt.»',/^ich bin \S+ jahre alt/i,'Ich bin zwölf Jahre alt.')
+ ]},
+ {id:'u3l3',title:'einen и keinen',items:[
+  RULE('Ich habe einen Hund','<p>После <b>haben</b> артикль у слов с <span class="art-der">der</span> меняется: <b>ein → einen</b>. У das и die ничего не меняется.</p><div class="tablewrap"><table><tr><th></th><th>Это …</th><th>У меня есть …</th><th>У меня нет …</th></tr><tr><td class="art-der">der Hund</td><td>Das ist ein Hund.</td><td>Ich habe ein<span class="hl">en</span> Hund.</td><td>Ich habe kein<span class="hl">en</span> Hund.</td></tr><tr><td class="art-das">das Pferd</td><td>Das ist ein Pferd.</td><td>Ich habe ein Pferd.</td><td>Ich habe kein Pferd.</td></tr><tr><td class="art-die">die Katze</td><td>Das ist eine Katze.</td><td>Ich habe eine Katze.</td><td>Ich habe keine Katze.</td></tr><tr><td>die Katzen (много)</td><td>Das sind Katzen.</td><td>Ich habe Katzen.</td><td>Ich habe keine Katzen.</td></tr></table></div><p><b>kein</b> — это «нет, никакой». По-русски «у меня нет собаки», по-немецки «я имею никакую собаку»: <b>Ich habe keinen Hund.</b></p><p>Запомни коротко: только мужской род получает <span class="hl">-en</span>.</p>'),
+  L('Ich habe einen Hund.','У меня есть собака.'),L('Ich habe keinen Hund.','У меня нет собаки.'),L('Ich habe kein Haustier.','У меня нет домашнего животного.'),L('Ich habe keine Katze.','У меня нет кошки.'),
+  GEN('akk',{n:6,w:'ein'}),
+  GEN('akk',{n:6,w:'kein'}),
+  C('«Ich habe keinen Hamster» — это…',['У меня нет хомяка','У меня есть хомяк','Это хомяк'],'У меня нет хомяка'),
+  O('Собери: «У меня нет собаки.»','Ich habe keinen Hund.'),
+  O('Собери: «У тебя есть кролик?»','Hast du ein Kaninchen?'),
+  T('Напиши по-немецки: «У меня есть попугай.»','Ich habe einen Papagei.',{kb:true,explain:'der Papagei → einen Papagei.'}),
+  T('Напиши по-немецки: «У меня нет кошки.»','Ich habe keine Katze.',{kb:true}),
+  T('Ответь «нет»: Hast du einen Hund?',['Nein, ich habe keinen Hund.','Nein, ich habe keinen Hund'],{kb:true}),
+  D('Ich habe keinen Hamster.','Ich habe keinen Hamster.','У меня нет хомяка.'),
+  F('Напиши, есть ли у тебя животное: «Ich habe …»',/^ich habe (einen|ein|eine|keinen|kein|keine|\S+) ?\S*/i,'Ich habe eine Katze. / Ich habe kein Haustier.')
+ ]},
+ {id:'u3l4',title:'Много животных',items:[
+  RULE('Множественное число','<p>Во множественном числе артикль всегда <span class="art-die"><b>die</b></span> — у всех слов.</p><p>А окончание у каждого слова своё, поэтому его учат вместе со словом:</p><div class="ex">der Hund → die Hund<span class="hl">e</span><br>das Pferd → die Pferd<span class="hl">e</span><br>der Tiger → die Tiger (не меняется)<br>der Hamster → die Hamster (не меняется)<br>das Lama → die Lama<span class="hl">s</span> · das Känguru → die Känguru<span class="hl">s</span><br>die Spinne → die Spinne<span class="hl">n</span> · die Schildkröte → die Schildkröte<span class="hl">n</span><br>die Maus → die M<span class="hl">ä</span>us<span class="hl">e</span> · die Kuh → die K<span class="hl">ü</span>h<span class="hl">e</span> · der Wolf → die W<span class="hl">ö</span>lf<span class="hl">e</span></div><p>В последних трёх появляются точки: a → ä, u → ü, o → ö.</p><p>Совет из учебника: на карточке пиши так — <b>die Maus, -¨e</b> — значит «die Mäuse».</p>'),
+ ].concat(ANIMALS.filter(function(x){return x[3]}).map(function(x){return L(x[0]+' '+x[1]+' → die '+x[3],x[2]+' → много')})).concat([
+  GEN('plural',{n:7}),
+  C('Какой артикль у всех слов во множественном числе?',['die','der','das'],'die'),
+  C('Как будет «мыши»?',['die Mäuse','die Mause','die Mäuser'],'die Mäuse',{sayAnswer:'die Mäuse'}),
+  C('Как будет «тигры»?',['die Tiger','die Tigers','die Tigeren'],'die Tiger',{sayAnswer:'die Tiger'}),
+  G('У меня две кошки.','Ich habe zwei ___.','Katzen'),
+  G('Я люблю лошадей.','Ich mag ___.','Pferde'),
+  D('die Wölfe','die Wölfe','Волки. Напиши, что слышишь.')
+ ])},
+ {id:'u3l5',title:'Какое оно? Цвета и описание',items:[
+  RULE('Описать животное','<p>Вместо названия животного говорят «он / оно / она» — по артиклю, а не по-русски:</p><div class="ex"><span class="art-der">der</span> Tiger → <b>er</b> ist groß (он большой)<br><span class="art-das">das</span> Kaninchen → <b>es</b> ist lieb (оно милое)<br><span class="art-die">die</span> Katze → <b>sie</b> ist süß (она милашка)<br>die Mäuse → <b>sie sind</b> schnell (они быстрые)</div><p>Обрати внимание: про собаку (der Hund) говорят <b>er</b> — «он».</p><p>Слова-описания: <b>groß</b> — большой, <b>klein</b> — маленький, <b>stark</b> — сильный, <b>schnell</b> — быстрый, <b>lieb</b> — милый, добрый, <b>süß</b> — милый, сладкий, <b>alt</b> — старый.</p><p>Цвета: <b>rot</b> — красный, <b>blau</b> — синий, <b>grün</b> — зелёный, <b>gelb</b> — жёлтый, <b>schwarz</b> — чёрный, <b>weiß</b> — белый, <b>braun</b> — коричневый, <b>grau</b> — серый.</p><p>Континенты: <b>Afrika, Asien, Europa, Australien, Nordamerika, Südamerika, Antarktis</b>. <b>Woher kommt das Lama?</b> — <b>Ich glaube, das Lama kommt aus Südamerika.</b> (Я думаю…) Не знаешь — <b>Das weiß ich nicht.</b></p>'),
+  L('rot','красный'),L('blau','синий'),L('grün','зелёный'),L('gelb','жёлтый'),L('schwarz','чёрный'),L('weiß','белый'),L('braun','коричневый'),L('grau','серый'),
+  L('groß','большой'),L('klein','маленький'),L('stark','сильный'),L('schnell','быстрый'),L('süß','милый'),
+  L('Ich glaube, das Lama kommt aus Südamerika.','Я думаю, лама из Южной Америки.'),L('Das weiß ich nicht.','Этого я не знаю.'),
+  C('der Hund ist braun. Как сказать «он коричневый»?',['Er ist braun.','Es ist braun.','Sie ist braun.'],'Er ist braun.',{explain:'der → er.'}),
+  C('das Kaninchen ist klein. Как сказать «он маленький»?',['Es ist klein.','Er ist klein.','Sie ist klein.'],'Es ist klein.',{explain:'das Kaninchen → es, хотя по-русски «кролик» — он.'}),
+  C('die Katze ist süß. Замени слово «Katze».',['Sie ist süß.','Er ist süß.','Es ist süß.'],'Sie ist süß.'),
+  C('die Mäuse ___ schnell.',['sind','ist'],'sind',{explain:'Много мышей — sie sind.'}),
+  C('«schwarz» — это…',['чёрный','белый','серый'],'чёрный',{sayAnswer:'schwarz'}),
+  C('«weiß» — это…',['белый','жёлтый','синий'],'белый',{sayAnswer:'weiß'}),
+  T('Напиши по-немецки: «зелёный»','grün',{kb:true}),
+  T('Напиши по-немецки: «Тигр сильный.»','Der Tiger ist stark.',{kb:true}),
+  R('Mein Lieblingstier','Ich habe ein Kaninchen. Es heißt Tori und ist ein Jahr alt. Mein Kaninchen mag Salat und Karotten. Es ist braun und klein.\n\nMein Lieblingstier ist der Tiger. Er ist groß und stark. Er kommt aus Asien. Ich mag Tiger und ich mag auch Pferde.','Два текста из учебника, с. 27: Зойла и Пётр. Salat — салат, Karotten — морковь.'),
+  C('Как зовут кролика?',['Tori','Pjotr','Zoila'],'Tori',{ctx:1}),
+  C('Какой кролик?',['коричневый и маленький','большой и сильный','белый'],'коричневый и маленький',{ctx:1}),
+  C('Откуда тигр?',['aus Asien','aus Afrika','aus Europa'],'aus Asien',{ctx:1}),
+  C('Woher kommt das Känguru?',['aus Australien','aus Europa','aus der Antarktis'],'aus Australien',{sayAnswer:'Das Känguru kommt aus Australien.'}),
+  F('Опиши своё животное или любимое животное (2 предложения). Например: «Mein Lieblingstier ist … Er/Es/Sie ist …»',/(ist|sind) \S+/i,'Mein Lieblingstier ist der Hund. Er ist groß und schwarz.')
+ ]},
+ {id:'u3t',title:'Проверь себя: тема 3',test:true,size:18},
+ {id:'kp1',title:'Kleine Pause: повторение тем 1–3',test:true,size:20,units:[1,2,3]}
+]},{n:4,title:'Mein Tag',ru:'Мой день',pages:'с. 35–42',lessons:[
+ {id:'u4l1',title:'Мой день: что я делаю',items:[
+  RULE('Что происходит за день','<p>Шесть фраз со с. 35 — весь школьный день:</p><div class="ex"><b>Mein Wecker klingelt.</b> — Звонит мой будильник.<br><b>Ich fahre zur Schule.</b> — Я еду в школу.<br><b>Ich habe Unterricht.</b> — У меня уроки.<br><b>Ich habe Mittagspause.</b> — У меня обеденный перерыв.<br><b>Ich mache Hausaufgaben.</b> — Я делаю домашнее задание.<br><b>Ich habe Freizeit.</b> — У меня свободное время.</div><p><b>aufstehen</b> — вставать. <b>Timo, aufstehen!</b> — Тимо, вставай!</p><p><b>müde</b> — сонный, уставший: <b>Ich bin so müde!</b> <b>zu spät</b> — опоздать: <b>Ich bin viel zu spät.</b> — Я сильно опаздываю.</p><p><b>heute</b> — сегодня.</p>'),
+  L('Mein Wecker klingelt.','Звонит мой будильник.'),L('zur Schule fahren','ехать в школу'),L('Unterricht haben','быть на уроках'),L('Mittagspause haben','обеденный перерыв'),L('Hausaufgaben machen','делать домашнее задание'),L('Freizeit haben','свободное время'),
+  L('Timo, aufstehen!','Тимо, вставай!'),L('Ich bin so müde!','Я так хочу спать!'),L('Wie viel Uhr ist es?','Который час?'),L('Ich bin viel zu spät.','Я сильно опаздываю.'),L('heute','сегодня'),
+  C('«Hausaufgaben machen» — это…',['делать домашнее задание','быть на уроках','ехать в школу'],'делать домашнее задание',{sayAnswer:'Hausaufgaben machen'}),
+  C('«Freizeit» — это…',['свободное время','обеденный перерыв','урок'],'свободное время',{sayAnswer:'die Freizeit'}),
+  C('Послушай. Что это значит?',['Звонит мой будильник.','Я еду в школу.','Я делаю уроки.'],'Звонит мой будильник.',{say:'Mein Wecker klingelt.',hide:true}),
+  G('Я делаю домашнее задание.','Ich ___ Hausaufgaben.','mache'),
+  G('У меня обеденный перерыв.','Ich ___ Mittagspause.','habe'),
+  G('Я так хочу спать!','Ich bin so ___!','müde',{kb:true}),
+  R('Timo, aufstehen!','Mama: Timo, aufstehen! Es ist schon halb sieben. Aufstehen!\nTimo: Ich bin so müde! Wie viel Uhr ist es?\nMama: Halb sieben.\nTimo: Halb sieben? Ich habe am Mittwoch erst um halb neun Schule.\nMama: Timo, heute ist Donnerstag, nicht Mittwoch!\nTimo: Was? Mann, so ein Mist! Ich bin viel zu spät. Um Viertel vor acht habe ich Russisch-AG.','Сценка из учебника, с. 36. schon — уже, erst um — только в, so ein Mist — вот блин, die AG — кружок.'),
+  C('Где Тимо?',['дома','в школе'],'дома',{ctx:1}),
+  C('Какой сегодня день?',['Donnerstag','Mittwoch'],'Donnerstag',{ctx:1}),
+  C('Во сколько у Тимо кружок?',['um Viertel vor acht','um halb neun'],'um Viertel vor acht',{ctx:1}),
+  C('Какой это кружок?',['Russisch-AG','Englisch-AG'],'Russisch-AG',{ctx:1}),
+  O('Собери: «Я делаю домашнее задание.»','Ich mache Hausaufgaben.'),
+  T('Напиши по-немецки: «Я так хочу спать!»','Ich bin so müde!',{kb:true}),
+  D('Wie viel Uhr ist es?','Wie viel Uhr ist es?','Который час?')
+ ]},
+ {id:'u4l2',title:'Который час?',items:[
+  RULE('Как говорят время','<p>Вопрос: <b>Wie viel Uhr ist es?</b> или <b>Wie spät ist es?</b> Ответ начинается с <b>Es ist …</b></p><div class="ex">7:00 — <b>sieben Uhr</b><br>7:10 — <b>zehn nach sieben</b> (десять после семи)<br>7:15 — <b>Viertel nach sieben</b> (четверть после семи)<br>7:30 — <b>halb acht</b><br>7:40 — <b>zwanzig vor acht</b> (двадцать до восьми)<br>7:45 — <b>Viertel vor acht</b> (четверть до восьми)</div><p><b>nach</b> — после, <b>vor</b> — до, <b>Viertel</b> — четверть.</p><p>Главная ловушка — <b>halb</b>. <b>halb acht</b> — это 7:30, а не 8:30. Как по-русски «половина восьмого»: полпути к восьми.</p><p>Час дня: <b>ein Uhr</b>, но <b>Viertel nach eins</b>, <b>halb eins</b> (12:30).</p><p>«Во сколько?» — <b>um</b>: <b>um halb sieben</b> — в половине седьмого.</p>'),
+  L('Es ist sieben Uhr.','Сейчас семь часов.'),L('Es ist Viertel nach sieben.','Четверть восьмого (7:15).'),L('Es ist halb acht.','Половина восьмого (7:30).'),L('Es ist zwanzig vor acht.','Без двадцати восемь (7:40).'),L('Es ist Viertel vor acht.','Без четверти восемь (7:45).'),L('Wie spät ist es?','Который час?'),
+  C('Что значит «halb acht»?',['7:30','8:30','8:00'],'7:30',{sayAnswer:'halb acht',explain:'halb acht — половина восьмого, 7:30.'}),
+  C('Что значит «halb eins»?',['12:30','1:30','1:00'],'12:30',{sayAnswer:'halb eins'}),
+  GEN('timeRead',{n:5}),
+  GEN('timeHear',{n:5}),
+  G('7:15 — четверть восьмого','Es ist Viertel ___ sieben.','nach'),
+  G('7:45 — без четверти восемь','Es ist Viertel ___ acht.','vor'),
+  G('9:30 — половина десятого','Es ist ___ zehn.','halb'),
+  T('Напиши словами, как говорят: 6:30',['halb sieben','Es ist halb sieben.'],{kb:true}),
+  T('Напиши словами, как говорят: 8:00',['acht Uhr','Es ist acht Uhr.'],{kb:true}),
+  T('Напиши словами, как говорят: 10:15',['Viertel nach zehn','Es ist Viertel nach zehn.'],{kb:true}),
+  O('Собери: «В половине седьмого звонит мой будильник.»','Um halb sieben klingelt mein Wecker.')
+ ]},
+ {id:'u4l3',title:'Дни недели. Школьный день Тимо',items:[
+  RULE('Дни недели и «официальное» время','<div class="ex"><b>der Montag</b> — понедельник<br><b>der Dienstag</b> — вторник<br><b>der Mittwoch</b> — среда<br><b>der Donnerstag</b> — четверг<br><b>der Freitag</b> — пятница<br><b>der Samstag</b> — суббота<br><b>der Sonntag</b> — воскресенье<br><b>das Wochenende</b> — выходные</div><p>Все дни недели — <span class="art-der">der</span>. «В понедельник» — <b>am Montag</b>. «По понедельникам» — <b>montags</b>, с маленькой буквы.</p><p><b>von Montag bis Freitag</b> — с понедельника по пятницу.</p><p>В расписании и на вокзале время говорят по цифрам: 13:40 — <b>dreizehn Uhr vierzig</b>, 6:30 — <b>sechs Uhr dreißig</b>.</p><p><b>die Stunde</b> — урок или час. <b>der Stundenplan</b> — расписание уроков.</p>'),
+  L('der Montag','понедельник'),L('der Dienstag','вторник'),L('der Mittwoch','среда'),L('der Donnerstag','четверг'),L('der Freitag','пятница'),L('der Samstag','суббота'),L('der Sonntag','воскресенье'),L('das Wochenende','выходные'),
+  L('am Montag','в понедельник'),L('montags','по понедельникам'),L('von Montag bis Freitag','с понедельника по пятницу'),L('Am Samstag habe ich frei.','В субботу я свободна.'),L('der Stundenplan','расписание уроков'),
+  C('«Donnerstag» — это…',['четверг','вторник','среда'],'четверг',{sayAnswer:'der Donnerstag'}),
+  C('«Dienstag» — это…',['вторник','четверг','пятница'],'вторник',{sayAnswer:'der Dienstag'}),
+  C('Послушай. Какой это день?',['среда','суббота','понедельник'],'среда',{say:'Mittwoch',hide:true}),
+  T('Напиши по-немецки: «воскресенье»','Sonntag',{kb:true,explain:'der Sonntag.'}),
+  T('Напиши по-немецки: «пятница»','Freitag',{kb:true}),
+  T('Напиши по-немецки: «четверг»','Donnerstag',{kb:true}),
+  G('В понедельник у меня физкультура.','___ Montag habe ich Sport.','Am'),
+  G('Школа с понедельника по пятницу.','Schule ist von Montag ___ Freitag.','bis'),
+  C('Послушай. Какое это время?',['13:40','14:30','3:40'],'13:40',{say:'dreizehn Uhr vierzig',hide:true}),
+  C('Послушай. Какое это время?',['16:45','6:45','16:15'],'16:45',{say:'sechzehn Uhr fünfundvierzig',hide:true}),
+  R('Timos Schultag','Ich heiße Timo. Ich bin dreizehn Jahre alt und wohne in Heidelberg. Ich bin in Klasse 7d. Wir haben fünf Tage Schule: von Montag bis Freitag. Mein Wecker klingelt um halb sieben. Ich gehe um Viertel nach sieben aus dem Haus. Der Unterricht beginnt um Viertel vor acht. Wir haben sechs Stunden Unterricht, bis 12 Uhr 40, und dann eine Stunde Mittagspause. Am Nachmittag haben wir drei Stunden. Jede Unterrichtsstunde hat 45 Minuten. Um 16 Uhr ist die Schule zu Ende. Gegen 16 Uhr 45 bin ich zu Hause.','Текст из учебника, с. 38 (немного сокращён). aus dem Haus gehen — выходить из дома, zu Ende — закончилось, zu Hause — дома, gegen — около.'),
+  C('Во сколько звонит будильник Тимо?',['um halb sieben','um halb acht','um sieben Uhr'],'um halb sieben',{ctx:1}),
+  C('Когда начинаются уроки?',['um Viertel vor acht','um Viertel nach sieben','um acht Uhr'],'um Viertel vor acht',{ctx:1}),
+  C('Сколько минут длится урок?',['45','40','60'],'45',{ctx:1}),
+  C('Сколько дней в неделю Тимо учится?',['5','6','4'],'5',{ctx:1}),
+  F('Напиши, в какие дни ты учишься: «Ich habe von … bis … Schule.»',/von \S+ bis \S+/i,'Ich habe von Montag bis Freitag Schule.')
+ ]},
+ {id:'u4l4',title:'Когда? Время суток и порядок слов',items:[
+  RULE('um, am, von … bis, gegen','<div class="ex"><b>um</b> + часы: <b>um</b> acht Uhr — в восемь<br><b>am</b> + день: <b>am</b> Samstag — в субботу<br><b>von … bis</b>: <b>von</b> 12 <b>bis</b> 13 Uhr — с 12 до 13<br><b>gegen</b>: <b>gegen</b> 16 Uhr — около 16 часов</div><p>Время суток:</p><div class="ex"><b>am Morgen</b> / <b>morgens</b> — утром<br><b>am Vormittag</b> / <b>vormittags</b> — до обеда<br><b>am Mittag</b> / <b>mittags</b> — в полдень<br><b>am Nachmittag</b> / <b>nachmittags</b> — после обеда<br><b>am Abend</b> / <b>abends</b> — вечером<br><b>in der Nacht</b> / <b>nachts</b> — ночью</div><p>Главное правило немецкого предложения: <b>глагол всегда на втором месте</b>. Если предложение начинается со времени, подлежащее уходит за глагол:</p><div class="ex">Der Unterricht <u>beginnt</u> um acht.<br>Um acht <u>beginnt</u> der Unterricht.<br>Montags <u>habe</u> ich Musik.</div><p>Нельзя: <s>Um acht der Unterricht beginnt.</s></p>'),
+  L('am Morgen / morgens','утром'),L('am Nachmittag / nachmittags','после обеда'),L('am Abend / abends','вечером'),L('in der Nacht / nachts','ночью'),
+  L('Wann beginnt der Unterricht?','Когда начинаются уроки?'),L('Um wie viel Uhr kommst du nach Hause?','Во сколько ты приходишь домой?'),L('Gegen 16 Uhr bin ich wieder zu Hause.','Около 16 часов я снова дома.'),
+  C('___ acht Uhr beginnt die Schule.',['Um','Am','Von'],'Um',{explain:'С часами — um.'}),
+  C('___ Sonntag lerne ich nicht.',['Am','Um','Gegen'],'Am',{explain:'С днём недели — am.'}),
+  C('Die Pause ist ___ 12 bis 13 Uhr.',['von','um','am'],'von'),
+  C('«abends» — это…',['вечером','утром','ночью'],'вечером',{sayAnswer:'abends'}),
+  C('«nachts» — это…',['ночью','после обеда','вечером'],'ночью',{sayAnswer:'nachts'}),
+  C('Как правильно?',['Um acht beginnt der Unterricht.','Um acht der Unterricht beginnt.','Um acht Unterricht der beginnt.'],'Um acht beginnt der Unterricht.',{explain:'Глагол на втором месте, подлежащее после него.'}),
+  C('Как правильно?',['Montags habe ich Musik.','Montags ich habe Musik.'],'Montags habe ich Musik.'),
+  O('Собери: «В восемь начинаются уроки.»','Um acht beginnt der Unterricht.'),
+  O('Собери: «В субботу у меня нет школы.»','Am Samstag habe ich keine Schule.'),
+  O('Собери: «Когда у тебя математика?»','Wann hast du Mathe?'),
+  G('Вечером я смотрю фильмы.','Abends ___ ich Filme.','sehe'),
+  T('Напиши по-немецки: «Когда начинаются уроки?»','Wann beginnt der Unterricht?',{kb:true}),
+  R('Müde (Lied)','Es ist sechs Uhr. Mein Wecker klingelt.\nUnd es schrillt mein Telefon.\nO.k., o.k., ich stehe auf.\nO.k., o.k., ich komm ja schon.\n\nIch bin müde, müde, müde.\nIch mach den Wecker aus.\nIch bin müde, müde, müde.\nIch bleibe heut zu Haus.','Песня из учебника, с. 41. schrillen — трезвонить, ausmachen — выключать, bleiben — оставаться.'),
+  C('Во сколько звонит будильник в песне?',['um sechs Uhr','um halb sieben','um sieben Uhr'],'um sechs Uhr',{ctx:1}),
+  F('Напиши, во сколько начинаются твои уроки: «Mein Unterricht beginnt um …»',/beginnt um \S+/i,'Mein Unterricht beginnt um acht Uhr.')
+ ]},
+ {id:'u4t',title:'Проверь себя: тема 4',test:true,size:18}
+]},
+{n:5,title:'Hobbys',ru:'Хобби',pages:'с. 43–50',lessons:[
+ {id:'u5l1',title:'Хобби и gern',items:[
+  RULE('Чем ты занимаешься?','<p><b>Was ist dein Hobby?</b> — Какое у тебя хобби? <b>Mein Hobby ist Malen.</b></p><p><b>gern</b> (или <b>gerne</b>) значит «охотно». Так говорят «я люблю что-то делать»: глагол + <b>gern</b>.</p><div class="ex">Ich spiele <b>gern</b> Fußball. — Я люблю играть в футбол.<br>Ich schwimme <b>nicht gern</b>. — Я не люблю плавать.<br><b>Was machst du gern?</b> — Что ты любишь делать?</div><p>Сравни: <b>Ich mag Fußball.</b> — Я люблю футбол (сам футбол). <b>Ich spiele gern Fußball.</b> — Я люблю в него играть.</p>'),
+  L('Musik hören','слушать музыку'),L('Fahrrad fahren','кататься на велосипеде'),L('Ski fahren','кататься на лыжах'),L('schwimmen','плавать'),L('malen','рисовать'),L('tanzen','танцевать'),L('singen','петь'),L('basteln','мастерить'),L('reiten','ездить верхом'),L('chatten','переписываться в чате'),L('fernsehen','смотреть телевизор'),L('Karten spielen','играть в карты'),L('Computerspiele spielen','играть в компьютерные игры'),L('Freunde treffen','встречаться с друзьями'),L('shoppen gehen','ходить по магазинам'),L('Flöte spielen','играть на флейте'),L('angeln','рыбачить'),
+  L('Was ist dein Hobby?','Какое у тебя хобби?'),L('Ich spiele gern Fußball.','Я люблю играть в футбол.'),L('Was machst du gern?','Что ты любишь делать?'),
+  C('«basteln» — это…',['мастерить','рисовать','петь'],'мастерить',{sayAnswer:'basteln'}),
+  C('«reiten» — это…',['ездить верхом','кататься на лыжах','плавать'],'ездить верхом',{sayAnswer:'reiten'}),
+  C('«malen» — это…',['рисовать','танцевать','рыбачить'],'рисовать',{sayAnswer:'malen'}),
+  C('Послушай. Какое это хобби?',['встречаться с друзьями','слушать музыку','смотреть телевизор'],'встречаться с друзьями',{say:'Freunde treffen',hide:true}),
+  C('Послушай. Какое это хобби?',['кататься на велосипеде','кататься на лыжах','играть в карты'],'кататься на велосипеде',{say:'Fahrrad fahren',hide:true}),
+  T('Напиши по-немецки: «танцевать»','tanzen',{kb:true}),
+  T('Напиши по-немецки: «петь»','singen',{kb:true}),
+  T('Напиши по-немецки: «слушать музыку»','Musik hören',{kb:true}),
+  G('Я люблю рисовать.','Ich male ___.',['gern','gerne']),
+  G('Что ты любишь делать?','Was ___ du gern?','machst'),
+  O('Собери: «Я люблю играть в футбол.»','Ich spiele gern Fußball.'),
+  O('Собери: «Я не люблю плавать.»','Ich schwimme nicht gern.'),
+  F('Напиши, что ты любишь делать: «Ich … gern …»',/^ich \S+ (gern|gerne)/i,'Ich male gern.')
+ ]},
+ {id:'u5l2',title:'Глаголы, где меняется гласная',items:[
+  RULE('fahren → du fährst','<p>У некоторых глаголов с <b>du</b> и <b>er/sie/es</b> меняется гласная в корне. Остальные формы обычные.</p><div class="tablewrap"><table><tr><th></th><th>a → ä</th><th>e → ie</th><th>e → ie</th><th>e → i</th><th>e → i</th></tr><tr><td>ich</td><td>fahre</td><td>sehe</td><td>lese</td><td>spreche</td><td>treffe</td></tr><tr><td>du</td><td>f<span class="hl">ä</span>hrst</td><td>s<span class="hl">ie</span>hst</td><td>l<span class="hl">ie</span>st</td><td>spr<span class="hl">i</span>chst</td><td>tr<span class="hl">i</span>ffst</td></tr><tr><td>er/sie/es</td><td>f<span class="hl">ä</span>hrt</td><td>s<span class="hl">ie</span>ht</td><td>l<span class="hl">ie</span>st</td><td>spr<span class="hl">i</span>cht</td><td>tr<span class="hl">i</span>fft</td></tr><tr><td>wir</td><td>fahren</td><td>sehen</td><td>lesen</td><td>sprechen</td><td>treffen</td></tr><tr><td>ihr</td><td>fahrt</td><td>seht</td><td>lest</td><td>sprecht</td><td>trefft</td></tr><tr><td>sie/Sie</td><td>fahren</td><td>sehen</td><td>lesen</td><td>sprechen</td><td>treffen</td></tr></table></div><p><b>fahren</b> — ехать, кататься; <b>sehen</b> — видеть, смотреть; <b>lesen</b> — читать; <b>sprechen</b> — говорить; <b>treffen</b> — встречать.</p><p>Запомни: гласная меняется <b>только с du и er/sie/es</b>.</p>'),
+  L('Sie fährt gern Fahrrad.','Она любит кататься на велосипеде.'),L('Er liest Romane.','Он читает романы.'),L('Abends sieht sie gern Filme.','Вечером она любит смотреть фильмы.'),L('Sie spricht Italienisch.','Она говорит по-итальянски.'),L('Sie trifft gerne Freunde.','Она любит встречаться с друзьями.'),
+  GEN('conj',{verbs:['fahren','sehen','lesen','sprechen','treffen'],prons:[1,2],n:8}),
+  GEN('conj',{verbs:['fahren','sehen','lesen','sprechen','treffen'],prons:[0,3,4],n:3}),
+  G('Ты говоришь по-немецки?','___ du Deutsch?','Sprichst'),
+  G('Кира катается на велосипеде.','Kira ___ Fahrrad.','fährt',{kb:true}),
+  R('Hast du ein Hobby?','Tessa ist 14 und wohnt in Graz in Österreich. Sie hat viele Hobbys: Pferde, Ski fahren, Shoppen gehen und Kochen. Sie chattet oft mit Freunden. Sie spricht Italienisch und Griechisch. Abends sieht sie gerne Filme oder sie liest.\n\nKira wohnt in Flensburg in Deutschland. Sie ist 13 und mag Sport. Sie fährt gern Fahrrad. Mittwochs und freitags spielt sie Fußball. Sie geht nicht gern zur Schule, aber sie mag Englisch.\n\nSofie ist 15. Sie kommt aus Frankreich und wohnt jetzt in der Schweiz. Ihr großes Hobby ist Tanzen. Sie trifft gerne Freunde. Am Wochenende geht Sofie oft ins Kino. Sie liebt Krimis.','Три текста из учебника, с. 45 (сокращены). oft — часто, ins Kino gehen — ходить в кино, der Krimi — детектив.'),
+  C('Где живёт Тесса?',['in Österreich','in Deutschland','in der Schweiz'],'in Österreich',{ctx:1}),
+  C('Какие языки знает Тесса?',['Italienisch und Griechisch','Englisch und Französisch','Deutsch und Russisch'],'Italienisch und Griechisch',{ctx:1}),
+  C('Когда Кира играет в футбол?',['mittwochs und freitags','am Wochenende','montags'],'mittwochs und freitags',{ctx:1}),
+  C('Какое хобби у Софи?',['танцы','футбол','лошади'],'танцы',{ctx:1}),
+  T('Напиши по-немецки: «Она читает книгу.»','Sie liest ein Buch.',{kb:true}),
+  T('Напиши по-немецки: «Ты смотришь фильм?»','Siehst du einen Film?',{kb:true,explain:'der Film → einen Film.'})
+ ]},
+ {id:'u5l3',title:'Приставка уходит в конец',items:[
+  RULE('aufstehen: Ich stehe um 7 Uhr auf','<p>У некоторых глаголов приставка <b>отрывается</b> и уходит в <b>конец предложения</b>:</p><div class="ex"><b>auf</b>stehen — вставать → Ich <u>stehe</u> um sieben <b>auf</b>.<br><b>fern</b>sehen — смотреть телевизор → Er <u>sieht</u> abends <b>fern</b>.<br><b>mit</b>kommen — пойти вместе → <u>Kommst</u> du <b>mit</b>?<br><b>ab</b>holen — заходить за кем-то → Ich <u>hole</u> dich um fünf <b>ab</b>.<br><b>an</b>fangen — начинаться → Der Film <u>fängt</u> um sechs <b>an</b>.</div><p>Глагол, как всегда, на втором месте, а приставка — в самом конце. Получается «рамка».</p><p>Ударение всегда на приставке: <b>AUF</b>stehen, <b>FERN</b>sehen.</p><p><b>anfangen</b> ещё и меняет гласную: du f<span class="hl">ä</span>ngst an, er f<span class="hl">ä</span>ngt an.</p>'),
+  L('aufstehen — Ich stehe spät auf.','вставать — Я встаю поздно.'),L('fernsehen — Er sieht fern.','смотреть телевизор — Он смотрит телевизор.'),L('mitkommen — Kommst du mit?','пойти с кем-то — Пойдёшь со мной?'),L('abholen — Ich hole dich ab.','заходить за кем-то — Я за тобой зайду.'),L('anfangen — Der Film fängt um sechs an.','начинаться — Фильм начинается в шесть.'),
+  L('Was machst du am Wochenende?','Что ты делаешь на выходных?'),
+  C('Ich stehe um sieben Uhr ___.',['auf','an','mit'],'auf'),
+  C('Der Film fängt um acht ___.',['an','ab','auf'],'an'),
+  C('Ich hole dich um fünf ___.',['ab','mit','fern'],'ab'),
+  C('Kommst du ___?',['mit','an','auf'],'mit'),
+  C('Где стоит приставка «auf» в предложении?',['в конце','сразу после глагола','в начале'],'в конце',{explain:'Ich stehe um sieben auf — приставка в конце.'}),
+  O('Собери: «В субботу я встаю поздно.»','Am Samstag stehe ich spät auf.'),
+  O('Собери: «Он смотрит телевизор.»','Er sieht fern.'),
+  O('Собери: «Я зайду за тобой в пять.»','Ich hole dich um fünf ab.'),
+  O('Собери: «Фильм начинается в шесть.»','Der Film fängt um sechs an.'),
+  T('Напиши по-немецки: «Пойдёшь со мной?»','Kommst du mit?',{kb:true}),
+  T('Напиши по-немецки: «Я встаю в семь.»',['Ich stehe um sieben auf.','Ich stehe um sieben Uhr auf.','Ich stehe um 7 Uhr auf.','Ich stehe um 7 auf.'],{kb:true}),
+  R('Am Wochenende','Lena: Sag mal, Florian, was machst du am Wochenende?\nFlorian: Am Samstag stehe ich spät auf. Um drei gehe ich schwimmen. Und du?\nLena: Ich gehe abends ins Kino. Kommst du mit?\nFlorian: Nein, da sehe ich fern: Bayern München gegen FC Barcelona.\nLena: Und am Sonntag?\nFlorian: Ja, am Sonntag geht es. Um wie viel Uhr?\nLena: Ich hole dich um fünf Uhr ab. Der Film fängt um sechs an.','Диалог из учебника, с. 46 (имя Лена добавлено). Sag mal — слушай, da — тогда, es geht — получится, gegen — против.'),
+  C('Что Флориан делает в субботу вечером?',['смотрит футбол по телевизору','идёт в кино','плавает'],'смотрит футбол по телевизору',{ctx:1}),
+  C('Во сколько начинается фильм в воскресенье?',['um sechs','um fünf','um drei'],'um sechs',{ctx:1}),
+  F('Напиши, во сколько ты встаёшь: «Ich stehe um … auf.»',/^ich stehe .+ auf/i,'Ich stehe um sieben Uhr auf.')
+ ]},
+ {id:'u5l4',title:'Договориться о встрече',items:[
+  RULE('Kommst du mit?','<p>Пригласить: <b>Ich gehe ins Kino. Kommst du mit?</b> — Я иду в кино. Пойдёшь со мной?</p><p>Ответы:</p><div class="ex">Да: <b>Ja, gerne!</b> · <b>Ja, klar.</b><br>Может быть: <b>Vielleicht.</b> · <b>Ich weiß noch nicht.</b><br>Нет: <b>Nein, ich habe keine Zeit.</b> (нет времени) · <b>Nein, ich habe keine Lust.</b> (не хочется)</div><p>Если тебе отказали: <b>Schade.</b> — Жаль.</p><p>Договориться о времени: <b>Um wie viel Uhr?</b> — <b>Ich hole dich um sechs ab.</b></p>'),
+  L('Ich gehe ins Kino. Kommst du mit?','Я иду в кино. Пойдёшь со мной?'),L('Ja, gerne!','Да, с удовольствием!'),L('Vielleicht.','Может быть.'),L('Ich weiß noch nicht.','Я ещё не знаю.'),L('Nein, ich habe keine Zeit.','Нет, у меня нет времени.'),L('Ich habe keine Lust.','Мне не хочется.'),L('Schade.','Жаль.'),L('Um wie viel Uhr?','Во сколько?'),
+  C('Тебя зовут в кино, ты рада. Что ответишь?',['Ja, gerne!','Schade.','Ich habe keine Lust.'],'Ja, gerne!'),
+  C('Ты занята и не можешь пойти. Что скажешь?',['Nein, ich habe keine Zeit.','Ja, klar.','Um wie viel Uhr?'],'Nein, ich habe keine Zeit.'),
+  C('Подруга не может пойти. Что ей скажешь?',['Schade.','Super!','Tschüs!'],'Schade.'),
+  C('«Ich habe keine Lust» — это…',['мне не хочется','у меня нет времени','я не знаю'],'мне не хочется'),
+  G('У меня нет времени.','Ich habe keine ___.','Zeit'),
+  G('Пойдёшь со мной?','Kommst du ___?','mit'),
+  O('Собери: «Я иду в кино. Пойдёшь со мной?»','Ich gehe ins Kino. Kommst du mit?'),
+  O('Собери: «Нет, мне не хочется.»','Nein, ich habe keine Lust.'),
+  T('Напиши по-немецки: «Во сколько?»','Um wie viel Uhr?',{kb:true}),
+  D('Ich weiß noch nicht.','Ich weiß noch nicht.','Я ещё не знаю.'),
+  D('Ich hole dich um sechs ab.','Ich hole dich um sechs ab.','Я зайду за тобой в шесть.'),
+  F('Пригласи подругу: «Ich gehe … Kommst du mit?»',/kommst du mit/i,'Ich gehe schwimmen. Kommst du mit?')
+ ]},
+ {id:'u5l5',title:'können: что ты умеешь',items:[
+  RULE('Глагол können — «мочь, уметь»','<div class="tablewrap"><table><tr><td>ich <b>kann</b></td><td>wir können</td></tr><tr><td>du <b>kannst</b></td><td>ihr könnt</td></tr><tr><td>er/sie/es <b>kann</b></td><td>sie/Sie können</td></tr></table></div><p>Внимание: <b>ich kann</b> и <b>er kann</b> — одинаково, без окончания.</p><p>После <b>können</b> второй глагол стоит <b>в конце</b>, в словарной форме:</p><div class="ex">Ich <u>kann</u> gut <b>kochen</b>. — Я хорошо готовлю.<br><u>Kannst</u> du Einrad <b>fahren</b>? — Ты умеешь кататься на моноцикле?<br>Wir <u>können</u> schon ein bisschen Deutsch. — Мы уже немного знаем немецкий.</div><p>Насколько хорошо: <b>super</b> · <b>sehr gut</b> · <b>gut</b> · <b>ganz gut</b> · <b>ein bisschen</b> · <b>nicht so gut</b> · <b>nicht</b>.</p><p>Спросить разрешения: <b>Kann ich mitspielen?</b> — Можно мне поиграть с вами?</p>'),
+  L('Ich kann gut singen.','Я хорошо пою.'),L('Ich kann nicht Ski fahren.','Я не умею кататься на лыжах.'),L('Kannst du kochen?','Ты умеешь готовить?'),L('Ja, ein bisschen.','Да, немножко.'),L('Kann ich mitspielen?','Можно мне поиграть с вами?'),L('Das macht nichts.','Ничего страшного.'),
+  GEN('conj',{verbs:['können'],prons:[0,1,2,3,4,5],n:6}),
+  G('Ты умеешь готовить?','___ du kochen?','Kannst'),
+  G('Деннис умеет готовить.','Dennis ___ kochen.','kann'),
+  G('Лиза и Робин умеют кататься на скейтборде.','Lisa und Robin ___ Skateboard fahren.','können',{kb:true}),
+  C('Где стоит второй глагол после können?',['в конце','на втором месте','в начале'],'в конце',{explain:'Ich kann gut kochen — kochen в конце.'}),
+  O('Собери: «Я хорошо готовлю.»','Ich kann gut kochen.'),
+  O('Собери: «Ты умеешь играть в настольный теннис?»','Kannst du Tischtennis spielen?'),
+  O('Собери: «Можно мне поиграть с вами?»','Kann ich mitspielen?'),
+  T('Напиши по-немецки: «Я не умею кататься на лыжах.»','Ich kann nicht Ski fahren.',{kb:true}),
+  T('Напиши по-немецки: «Мы уже немного знаем немецкий.»','Wir können schon ein bisschen Deutsch.',{kb:true}),
+  R('Kann ich mitspielen?','Max: Kann ich mitspielen?\nLea: Ja, klar. Kannst du Tischtennis spielen?\nMax: Ja, ein bisschen.\nLea: Und du? Spielst du auch mit?\nTom: Ich weiß nicht.\nLea: Komm schon.\nTom: Aber ich kann nicht so gut spielen.\nLea: Das macht nichts.\nTom: O.k., ich komme.','Диалог из учебника, с. 49 (имена добавлены). Komm schon — ну давай.'),
+  C('Хорошо ли Макс играет в настольный теннис?',['немного','очень хорошо','совсем не умеет'],'немного',{ctx:1}),
+  C('Почему Том сначала не хочет играть?',['он плохо играет','у него нет времени','он устал'],'он плохо играет',{ctx:1}),
+  F('Напиши, что ты умеешь: «Ich kann gut …»',/^ich kann .+/i,'Ich kann gut malen.')
+ ]},
+ {id:'u5t',title:'Проверь себя: тема 5',test:true,size:18}
+]},
+{n:6,title:'Meine Familie',ru:'Моя семья',pages:'с. 51–58',lessons:[
+ {id:'u6l1',title:'Семья',items:[
+  RULE('Кто есть кто','<div class="tablewrap"><table><tr><th>мужчины</th><th>женщины</th><th>вместе (мн. ч.)</th></tr><tr><td><span class="art-der">der</span> Vater — папа</td><td><span class="art-die">die</span> Mutter — мама</td><td>die Eltern — родители</td></tr><tr><td><span class="art-der">der</span> Bruder — брат</td><td><span class="art-die">die</span> Schwester — сестра</td><td>die Geschwister — братья и сёстры</td></tr><tr><td><span class="art-der">der</span> Opa — дедушка</td><td><span class="art-die">die</span> Oma — бабушка</td><td>die Großeltern — бабушка и дедушка</td></tr><tr><td><span class="art-der">der</span> Onkel — дядя</td><td><span class="art-die">die</span> Tante — тётя</td><td></td></tr><tr><td><span class="art-der">der</span> Cousin — двоюродный брат</td><td><span class="art-die">die</span> Cousine — двоюродная сестра</td><td></td></tr></table></div><p>Где кто на фото: <b>vorne</b> — впереди, <b>hinten</b> — сзади, <b>links</b> — слева, <b>rechts</b> — справа, <b>in der Mitte</b> — в середине.</p><p><b>Wer ist das?</b> — Кто это? <b>Hast du Geschwister?</b> — У тебя есть братья или сёстры?</p>'),
+ ].concat(FAMILY.map(function(x){return L((x[3]==='pl'?'die':x[0])+' '+x[1],x[2])})).concat([
+  L('vorne / hinten','впереди / сзади'),L('links / rechts','слева / справа'),L('in der Mitte','в середине'),L('Wer ist das da vorne rechts?','Кто это там впереди справа?'),L('Hast du Geschwister?','У тебя есть братья или сёстры?'),
+  GEN('art',{n:6,list:'family'}),
+  C('«die Geschwister» — это…',['братья и сёстры','родители','бабушка и дедушка'],'братья и сёстры',{sayAnswer:'die Geschwister'}),
+  C('«die Großeltern» — это…',['бабушка и дедушка','родители','дядя и тётя'],'бабушка и дедушка',{sayAnswer:'die Großeltern'}),
+  C('«hinten links» — это…',['сзади слева','впереди справа','в середине'],'сзади слева'),
+  C('Послушай. Кто это?',['тётя','бабушка','двоюродная сестра'],'тётя',{say:'die Tante',hide:true}),
+  GEN('artType',{n:4,list:'family'}),
+  R('Familienfoto','Jan: Wer ist das da vorne rechts?\nMia: Das ist meine Cousine. Sie heißt Anke.\nJan: Und der Mann hinten links ist dein Vater?\nMia: Ja, genau. Und hinten in der Mitte steht mein Onkel.\nJan: Hast du noch Geschwister?\nMia: Ja, eine Schwester. Sie wohnt nicht zu Hause. Sie studiert schon.\nJan: Wie alt ist sie?\nMia: 19. Ich habe auch noch einen Cousin. Er ist 16.','Диалог из учебника, с. 52 (сокращён, имена добавлены). genau — точно, studieren — учиться в университете.'),
+  C('Кто стоит впереди справа?',['двоюродная сестра Анке','папа','дядя'],'двоюродная сестра Анке',{ctx:1}),
+  C('Где стоит дядя?',['hinten in der Mitte','vorne rechts','hinten links'],'hinten in der Mitte',{ctx:1}),
+  C('Сколько лет сестре?',['19','16','15'],'19',{ctx:1}),
+  T('Напиши по-немецки: «Кто это?»','Wer ist das?',{kb:true}),
+  F('Напиши о своей семье: «Ich habe …» (например, сколько у тебя братьев и сестёр)',/^ich habe .+/i,'Ich habe einen Bruder und zwei Schwestern.')
+ ])},
+ {id:'u6l2',title:'sein, ihr, unser: чей?',items:[
+  RULE('Притяжательные слова','<p>«Мой, твой, его, её…» зависят от того, <b>чей</b> предмет, а окончание — от артикля предмета:</p><div class="tablewrap"><table><tr><th>чей</th><th>der Vater, das Hobby</th><th>die Mutter, die Eltern</th></tr><tr><td>ich — мой</td><td>mein</td><td>mein<span class="hl">e</span></td></tr><tr><td>du — твой</td><td>dein</td><td>dein<span class="hl">e</span></td></tr><tr><td>er, es — его</td><td><b>sein</b></td><td>sein<span class="hl">e</span></td></tr><tr><td>sie — её</td><td><b>ihr</b></td><td>ihr<span class="hl">e</span></td></tr><tr><td>wir — наш</td><td>unser</td><td>unser<span class="hl">e</span></td></tr><tr><td>ihr — ваш (друзьям)</td><td>euer</td><td><b>eure</b></td></tr><tr><td>sie — их / Sie — Ваш</td><td>ihr / Ihr</td><td>ihr<span class="hl">e</span> / Ihr<span class="hl">e</span></td></tr></table></div><p>Правило как у mein: с <span class="art-die">die</span> и во множественном числе на конце <span class="hl">-e</span>.</p><p>Ловушка: <b>ihr</b> значит и «её», и «их». А <b>sein</b> — это и «быть», и «его».</p><div class="ex">Bert hat einen Hund. <b>Sein</b> Hund heißt Puppi.<br>Bina mag Mode. <b>Ihr</b> Hobby ist Schminken.<br>Das sind <b>unsere</b> Großeltern.</div><p>По-русски «свой» подходит всем, а по-немецки надо выбрать: <b>seine</b> Mutter (если он) или <b>ihre</b> Mutter (если она).</p>'),
+  L('Sein Hobby ist Radfahren.','Его хобби — велосипед.'),L('Ihr Hobby ist Kochen.','Её хобби — готовка.'),L('Das sind unsere Großeltern.','Это наши бабушка и дедушка.'),L('Wie heißt eure Mutter?','Как зовут вашу маму?'),
+  GEN('poss',{n:12}),
+  C('Bina (sie) hat einen Bruder. ___ Bruder heißt Bert.',['Ihr','Sein','Ihre'],'Ihr',{explain:'Бина — она → ihr. der Bruder → без -e.'}),
+  C('Bert (er) hat eine Schwester. ___ Schwester heißt Bina.',['Seine','Sein','Ihre'],'Seine',{explain:'Берт — он → sein; die Schwester → seine.'}),
+  R('Berts Bruder erzählt','Vorne rechts steht mein Bruder, er heißt Bert und ist 18 Jahre alt. Sein Hobby ist Radfahren. Meine Schwester Bina sitzt vorne links. Sie ist 15 und mag Mode und Schminken. In der Mitte sitzen unsere Oma und unser Opa, sie sind beide 65. Meine Mutter steht hinten links. Ihr Hobby ist Kochen. Der Mann hinten rechts ist mein Vater. Unser Hund Puppi ist auch auf dem Bild. Er ist so lieb.','Текст из учебника, с. 53 (сокращён). beide — оба, auf dem Bild — на картинке.'),
+  C('Какое хобби у Берта?',['Radfahren','Kochen','Schminken'],'Radfahren',{ctx:1}),
+  C('Сколько лет бабушке и дедушке?',['65','18','15'],'65',{ctx:1}),
+  C('Кто стоит сзади слева?',['мама','папа','Бина'],'мама',{ctx:1}),
+  O('Собери: «Его хобби — велосипед.»','Sein Hobby ist Radfahren.'),
+  O('Собери: «Это наши бабушка и дедушка.»','Das sind unsere Großeltern.'),
+  T('Напиши по-немецки: «Её брат живёт в Берлине.»','Ihr Bruder wohnt in Berlin.',{kb:true})
+ ]},
+ {id:'u6l3',title:'Чьё это? Papas Rucksack',items:[
+  RULE('Чей? Через -s','<p>Чтобы сказать «рюкзак папы», «книга Сильке», к имени добавляют <b>-s</b> и ставят его <b>впереди</b>:</p><div class="ex">das Buch von Silke → <b>Silkes</b> Buch<br>der Rucksack von Papa → <b>Papas</b> Rucksack<br>das Hobby von Paul → <b>Pauls</b> Hobby<br>die Tasche von Charlotte → <b>Charlottes</b> Tasche</div><p>Апостроф не нужен! Не <s>Silke&#39;s</s>, а <b>Silkes</b>.</p><p>Если имя уже кончается на <b>-s</b>, <b>-ß</b>, <b>-x</b> или <b>-z</b>, ставят только апостроф: <b>Lukas&#39; Zimmer</b>, <b>Markus&#39; Schwester</b>.</p>'),
+  L('Das ist Silkes Buch.','Это книга Сильке.'),L('Das ist Papas Rucksack.','Это папин рюкзак.'),L('Lukas\' Zimmer','комната Лукаса'),L('Was ist denn hier los?','Что тут происходит?'),L('Ich weiß es nicht.','Я не знаю.'),
+  C('Как сказать «тетрадь Леона»?',['Leons Heft','Leon\'s Heft','Heft Leons'],'Leons Heft',{sayAnswer:'Leons Heft'}),
+  C('Как сказать «комната Лукаса»?',['Lukas\' Zimmer','Lukass Zimmer','Lukas Zimmers'],'Lukas\' Zimmer'),
+  G('часы Сары','___ Uhr','Sarahs'),
+  G('фото Мартина','___ Foto','Martins'),
+  G('очки дедушки','___ Brille','Opas'),
+  G('планшет папы','___ Tablet','Papas'),
+  G('велосипед мамы','___ Fahrrad','Mamas'),
+  T('Напиши по-немецки: «Это сумка Марии.» (die Tasche)','Das ist Marias Tasche.',{kb:true}),
+  R('Chaos im Zimmer','Mutter: Was ist denn hier los? Julian, ist das dein Deutschbuch?\nJulian: Nein, das ist Silkes Buch. Mein Buch ist da.\nMutter: Und wo ist deine Schultasche?\nJulian: Meine Schultasche? Ich weiß es nicht.\nMutter: Du weißt es nicht!! Und wo ist Silke? Ist das ihr Rucksack?\nJulian: Nein. Das ist Papas Rucksack. Silkes Rucksack liegt da.','Диалог из учебника, с. 54. liegen — лежать, das Chaos — беспорядок.'),
+  C('Чья это книга?',['Сильке','Юлиана','папы'],'Сильке',{ctx:1}),
+  C('Где школьная сумка Юлиана?',['он не знает','на столе','у Сильке'],'он не знает',{ctx:1}),
+  C('Чей это рюкзак?',['папин','Сильке','мамин'],'папин',{ctx:1}),
+  G('Юлиан, это твоя школьная сумка?','Julian, ist das ___ Schultasche?','deine'),
+  G('Это её рюкзак? (Сильке)','Ist das ___ Rucksack?','ihr')
+ ]},
+ {id:'u6l4',title:'Профессии',items:[
+  RULE('Was ist deine Mutter von Beruf?','<p>Профессия — <b>der Beruf</b>. Вопрос: <b>Was ist dein Vater von Beruf?</b> — Кем работает твой папа?</p><p>Ответ <b>без артикля</b>: <b>Er ist Lehrer.</b> (не «ein Lehrer»). <b>Meine Mutter ist Ingenieurin.</b></p><p>Женская форма почти всегда: + <span class="hl">-in</span> и артикль <span class="art-die">die</span>:</p><div class="ex"><span class="art-der">der</span> Lehrer → <span class="art-die">die</span> Lehrer<span class="hl">in</span><br>der Verkäufer → die Verkäufer<span class="hl">in</span><br>der Polizist → die Polizist<span class="hl">in</span><br>der Pilot → die Pilot<span class="hl">in</span></div><p>Иногда появляются точки: der <b>A</b>rzt → die <b>Ä</b>rztin, der K<b>o</b>ch → die K<b>ö</b>chin.</p><p>Мечта: <b>Mein Traumberuf ist Pilotin.</b> — Профессия моей мечты — пилот.</p>'),
+ ].concat(JOBS.map(function(x){return L('der '+x[0]+' / die '+x[1],x[2])})).concat([
+  L('Was ist deine Mutter von Beruf?','Кем работает твоя мама?'),L('Meine Mutter ist Ingenieurin.','Моя мама — инженер.'),L('Mein Traumberuf ist Koch.','Профессия моей мечты — повар.'),
+  GEN('fem',{n:6}),
+  C('«der Tierarzt» — это…',['ветеринар','зубной врач','врач'],'ветеринар',{sayAnswer:'der Tierarzt'}),
+  C('«der Verkäufer» — это…',['продавец','полицейский','учитель'],'продавец',{sayAnswer:'der Verkäufer'}),
+  C('«die Informatikerin» — это…',['программистка','секретарь','архитектор'],'программистка'),
+  C('Как правильно?',['Mein Vater ist Lehrer.','Mein Vater ist ein Lehrer von Beruf.','Mein Vater Lehrer.'],'Mein Vater ist Lehrer.',{explain:'Профессию говорят без артикля.'}),
+  G('Моя мама — продавщица.','Meine Mutter ist ___.','Verkäuferin',{kb:true}),
+  G('Кем работает твой папа?','Was ist dein Vater von ___?','Beruf'),
+  O('Собери: «Профессия моей мечты — фотограф.»','Mein Traumberuf ist Fotograf.'),
+  T('Напиши по-немецки: «Мой папа — врач.»','Mein Vater ist Arzt.',{kb:true}),
+  T('Напиши по-немецки: «учительница»','Lehrerin',{kb:true}),
+  R('Traumberufe','Ich kann gut Tennis spielen. Mein Traumberuf ist Tennisspielerin!\n\nIch kann gut kochen und esse gern. Mein Traumberuf ist Koch.','Из учебника, с. 57. essen — есть, кушать.'),
+  F('Какая профессия твоей мечты? «Mein Traumberuf ist …»',/^mein traumberuf ist \S+/i,'Mein Traumberuf ist Malerin.')
+ ])},
+ {id:'u6t',title:'Проверь себя: тема 6',test:true,size:18}
+]},
+{n:7,title:'Was kostet das?',ru:'Сколько это стоит?',pages:'с. 59–69',lessons:[
+ {id:'u7l1',title:'На киоске',items:[
+  RULE('Покупки на киоске','<p>Киоск (<b>der Kiosk</b>) в Германии — маленький магазинчик: газеты, журналы, сладости, напитки.</p><p>Как попросить:</p><div class="ex"><b>Ich hätte gerne Kaugummis.</b> — Мне жвачку, пожалуйста. (очень вежливо)<br><b>Ich möchte einen Schokoriegel.</b> — Я хочу шоколадный батончик.<br><b>Ich nehme die Gummibärchen.</b> — Я возьму мармеладных мишек.</div><p>Продавец спросит: <b>Noch etwas?</b> — Что-нибудь ещё? Ответ: <b>Nein, das ist alles.</b> — Нет, это всё.</p><p>Цена: <b>Was kostet das?</b> — Сколько это стоит? <b>Das macht zusammen 1 Euro 45.</b> — Всего 1 евро 45.</p><p>Если товара нет: <b>Tut mir leid, das habe ich leider nicht.</b> — К сожалению, этого нет.</p>'),
+ ].concat(KIOSK.map(function(x){return L(x[0]+' '+x[1]+(x[3]&&x[3]!==x[1]?' → die '+x[3]:''),x[2])})).concat([
+  L('Ich hätte gerne Kaugummis.','Мне жвачку, пожалуйста.'),L('Noch etwas?','Что-нибудь ещё?'),L('Nein, das ist alles.','Нет, это всё.'),L('Was kostet das?','Сколько это стоит?'),L('Tut mir leid.','Мне жаль.'),
+  GEN('art',{n:8,list:'kiosk'}),
+  C('«die Zeitschrift» — это…',['журнал','газета','открытка'],'журнал',{sayAnswer:'die Zeitschrift'}),
+  C('«der Schokoriegel» — это…',['шоколадный батончик','жвачка','пакетик'],'шоколадный батончик',{sayAnswer:'der Schokoriegel'}),
+  C('Продавец спрашивает «Noch etwas?». Тебе больше ничего не нужно. Что ответишь?',['Nein, das ist alles.','Ja, gerne.','Tut mir leid.'],'Nein, das ist alles.'),
+  R('Am Kiosk','Mädchen: Guten Tag, ich hätte gerne Kaugummis. Was kosten die?\nVerkäuferin: Die Kaugummis kosten 1 Euro 50.\nMädchen: 1 Euro 50? Die sind aber teuer. Und was kosten die Gummibärchen?\nVerkäuferin: Die kosten 75 Cent.\nMädchen: Dann nehme ich die und einen Schokoriegel. Was kosten die Schokoriegel?\nVerkäuferin: Der kostet 70 Cent und der 90 Cent.\nMädchen: Dann nehme ich den da.\nVerkäuferin: Noch etwas?\nMädchen: Nein, das ist alles. Was kostet das?\nVerkäuferin: Das macht zusammen 1 Euro 45. Das sind 2 Euro, und 55 Cent zurück.\nMädchen: Danke, tschüs.','Диалог из учебника, с. 60. teuer — дорогой, dann — тогда, zusammen — вместе, zurück — сдача.'),
+  C('Сколько стоят жвачки?',['1 Euro 50','75 Cent','55 Cent'],'1 Euro 50',{ctx:1}),
+  C('Почему девочка не берёт жвачки?',['они дорогие','их нет','она их не любит'],'они дорогие',{ctx:1}),
+  C('Сколько она платит всего?',['1 Euro 45','2 Euro','90 Cent'],'1 Euro 45',{ctx:1}),
+  C('Сколько ей дают сдачи?',['55 Cent','45 Cent','75 Cent'],'55 Cent',{ctx:1}),
+  O('Собери: «Мне жвачку, пожалуйста.»','Ich hätte gerne Kaugummis.'),
+  T('Напиши по-немецки: «Сколько это стоит?»','Was kostet das?',{kb:true}),
+  T('Напиши по-немецки с артиклем: «журнал»','die Zeitschrift',{kb:true})
+ ])},
+ {id:'u7l2',title:'Цены. den da, die da',items:[
+  RULE('Как говорят цены','<div class="ex">1,50 € — <b>ein Euro fünfzig</b><br>0,75 € — <b>fünfundsiebzig Cent</b><br>3,99 € — <b>drei Euro neunundneunzig</b><br>5,00 € — <b>fünf Euro</b></div><p>Слово «Cent» после евро обычно не говорят: «zwei Euro zwanzig». В записи вместо точки — запятая: 1,50 €.</p><p>Одна вещь — <b>kostet</b>, несколько — <b>kosten</b>:</p><div class="ex">Der Comic <b>kostet</b> 3,99 €.<br>Die Kaugummis <b>kosten</b> 1,50 €.</div><p>Показать «вот этот» — артикль + <b>da</b>:</p><div class="ex"><span class="art-der">der</span> Kaugummi → Ich nehme <b>den da</b>. (der → den, как einen)<br><span class="art-das">das</span> Heft → Ich nehme <b>das da</b>.<br><span class="art-die">die</span> Zeitschrift → Ich nehme <b>die da</b>.</div><p><b>teuer</b> — дорогой, <b>billig</b> — дешёвый.</p>'),
+  L('Das ist aber teuer!','Ну это дорого!'),L('Das ist billig.','Это дёшево.'),L('Ich nehme den da.','Я возьму вот этот.'),L('Was kosten die Filzstifte?','Сколько стоят фломастеры?'),
+  GEN('priceHear',{n:6}),
+  GEN('priceRead',{n:4}),
+  C('Der Comic ___ 3,99 €.',['kostet','kosten'],'kostet'),
+  C('Die Filzstifte ___ 1,95 €.',['kosten','kostet'],'kosten',{explain:'Фломастеров много → kosten.'}),
+  C('der Kaugummi: Ich nehme ___ da.',['den','der','die'],'den',{explain:'der → den после nehmen.'}),
+  C('die Zeitschrift: Ich nehme ___ da.',['die','den','das'],'die'),
+  C('das Heft: Ich nehme ___ da.',['das','den','die'],'das'),
+  C('«billig» — это…',['дешёвый','дорогой','красивый'],'дешёвый'),
+  G('Это дорого!','Das ist aber ___!','teuer'),
+  O('Собери: «Сколько стоит комикс?»','Was kostet der Comic?'),
+  T('Напиши по-немецки: «Я возьму вот этот.» (der Kaugummi)','Ich nehme den da.',{kb:true}),
+  R('ei, au, eu','ei: eins, zwei, drei, der Preis, die Zeitschrift, einkaufen, ich weiß nicht\nau: kaufen, tausend, auch, der Kaugummi, die Pause, zu Hause\neu, äu: neun, Euro, teuer, Deutsch, der Freund, der Verkäufer','Фонетика, с. 61. ei читается «ай», au — «ау», eu и äu — «ой». Послушай и прочитай вслух.'),
+  C('Как читается «teuer»?',['тойер','теуер','тауер'],'тойер',{sayAnswer:'teuer'}),
+  C('Как читается «Preis» (цена)?',['прайс','прейс','прис'],'прайс',{sayAnswer:'der Preis'})
+ ]},
+ {id:'u7l3',title:'möchte: что ты хочешь',items:[
+  RULE('Глагол möchten — «хотел бы»','<div class="tablewrap"><table><tr><td>ich <b>möchte</b></td><td>wir möchten</td></tr><tr><td>du <b>möchtest</b></td><td>ihr möchtet</td></tr><tr><td>er/sie/es <b>möchte</b></td><td>sie/Sie möchten</td></tr></table></div><p>Как у <b>können</b>: с <b>ich</b> и <b>er</b> форма одинаковая — <b>möchte</b>.</p><p>После möchte — как после haben: <span class="art-der">der</span> → <b>einen</b>:</p><div class="ex">Ich möchte <b>einen</b> Hund. (der Hund)<br>Ich möchte <b>ein</b> Fahrrad. (das Fahrrad)<br>Ich möchte <b>eine</b> Katze. (die Katze)</div><p><b>zum Geburtstag</b> — на день рождения: <b>Was möchtest du zum Geburtstag?</b></p><p>Второй глагол, если он есть, уходит в конец: <b>Möchtest du einen Comic lesen?</b></p>'),
+  L('Was möchtest du zum Geburtstag?','Что ты хочешь на день рождения?'),L('Ich möchte gerne ein Fahrrad.','Я бы хотела велосипед.'),L('Adi möchte einen Hund.','Ади хочет собаку.'),L('der Geburtstag','день рождения'),L('Meine Geburtstagswünsche','Мои желания на день рождения'),
+  GEN('conj',{verbs:['möchten'],prons:[0,1,2,3,4,5],n:6}),
+  GEN('akk',{n:4,w:'ein',verb:'möchte',list:'kiosk'}),
+  G('Что ты хочешь на день рождения?','Was ___ du zum Geburtstag?','möchtest',{kb:true}),
+  G('Моя сестра тоже хочет собаку.','Meine Schwester ___ auch einen Hund.','möchte',{kb:true}),
+  G('Я хочу велосипед.','Ich möchte ___ Fahrrad.','ein'),
+  G('Я хочу комикс. (der Comic)','Ich möchte ___ Comic.','einen'),
+  R('Geburtstagswünsche','Adi: Was möchtest du gerne zum Geburtstag, Pia?\nPia: Ich möchte gerne ein Fahrrad, du auch?\nAdi: Nein, ich habe ein Fahrrad. Ich möchte gerne einen Hund.\nPia: Echt? Meine Schwester möchte auch einen Hund. Und was möchtest du noch?\nAdi: Dann möchte ich noch ein Computerspiel.','Диалог из учебника, с. 63 (окончание добавлено). Echt? — Правда? noch — ещё.'),
+  C('Что хочет Пиа?',['велосипед','собаку','компьютерную игру'],'велосипед',{ctx:1}),
+  C('Почему Ади не хочет велосипед?',['у него уже есть','он дорогой','он не умеет кататься'],'у него уже есть',{ctx:1}),
+  C('Кто ещё хочет собаку?',['сестра Пии','мама Ади','Пиа'],'сестра Пии',{ctx:1}),
+  O('Собери: «Что ты хочешь на день рождения?»','Was möchtest du zum Geburtstag?'),
+  T('Напиши по-немецки: «Я бы хотела собаку.»',['Ich möchte einen Hund.','Ich möchte gerne einen Hund.','Ich möchte gern einen Hund.'],{kb:true}),
+  F('Напиши своё желание на день рождения: «Ich möchte …»',/^ich möchte .+/i,'Ich möchte ein Tablet.')
+ ]},
+ {id:'u7l4',title:'Карманные деньги: nehmen, geben',items:[
+  RULE('nehmen, geben и ausgeben','<p>Ещё два глагола, где меняется гласная (e → i), как у sprechen:</p><div class="tablewrap"><table><tr><th></th><th>nehmen — брать</th><th>geben — давать</th><th>arbeiten — работать</th></tr><tr><td>ich</td><td>nehme</td><td>gebe</td><td>arbeite</td></tr><tr><td>du</td><td>n<span class="hl">imm</span>st</td><td>g<span class="hl">i</span>bst</td><td>arbeit<span class="hl">e</span>st</td></tr><tr><td>er/sie/es</td><td>n<span class="hl">imm</span>t</td><td>g<span class="hl">i</span>bt</td><td>arbeit<span class="hl">e</span>t</td></tr><tr><td>wir</td><td>nehmen</td><td>geben</td><td>arbeiten</td></tr><tr><td>ihr</td><td>nehmt</td><td>gebt</td><td>arbeitet</td></tr><tr><td>sie/Sie</td><td>nehmen</td><td>geben</td><td>arbeiten</td></tr></table></div><p>У <b>arbeiten</b> корень кончается на -t, поэтому вставляется <b>e</b>: du arbeit<b>e</b>st — иначе не выговорить.</p><p><b>ausgeben</b> — тратить, приставка уходит в конец: <b>Ich gebe viel Geld für Kino aus.</b> — Я трачу много денег на кино.</p><p><b>das Taschengeld</b> — карманные деньги, <b>bekommen</b> — получать, <b>pro Monat</b> — в месяц, <b>pro Woche</b> — в неделю.</p><p>Мнение: <b>Ich finde das gut / blöd.</b> <b>Das macht Spaß / keinen Spaß.</b> — Это весело / невесело.</p>'),
+  L('das Taschengeld','карманные деньги'),L('Ich bekomme 10 Euro pro Monat.','Я получаю 10 евро в месяц.'),L('Ich gebe viel Geld für Kino aus.','Я трачу много денег на кино.'),L('Ich kaufe oft Süßigkeiten.','Я часто покупаю сладости.'),L('Das macht Spaß.','Это весело.'),L('Ich finde das blöd.','По-моему, это глупо.'),L('Ich bin zufrieden.','Я довольна.'),
+  GEN('conj',{verbs:['nehmen','geben','arbeiten'],prons:[0,1,2,4],n:8}),
+  G('Ты возьмёшь шоколадный батончик?','___ du einen Schokoriegel?','Nimmst'),
+  G('Папа даёт мне деньги.','Papa ___ mir Geld.','gibt'),
+  G('Я трачу много денег на кино.','Ich gebe viel Geld für Kino ___.','aus'),
+  O('Собери: «Я трачу много денег на кино.»','Ich gebe viel Geld für Kino aus.'),
+  O('Собери: «Я получаю 10 евро в месяц.»','Ich bekomme 10 Euro pro Monat.'),
+  R('Schüler-Chat: Taschengeld','DarkFire: Hallo! Ich bekomme 8 Euro pro Woche und bin zufrieden! Ich bin 12.\nPJ: Ich bekomme nichts. Ich bin 16. Ich arbeite.\nSunny: Hi! Ich bin 14 und bekomme 20 Euro! Ich habe aber auch einen Job: Zeitungen austragen. Das bringt 50 Euro im Monat.\nMichi: Hey! Ich bin 14 und bekomme 30 Euro pro Monat.\nLebHeute: Ich bin 13 und bekomme 10 Euro pro Monat! Davon kaufe ich Süßigkeiten und gehe ins Kino. Ich bin zufrieden.','Чат из учебника, с. 65 (часть). nichts — ничего, Zeitungen austragen — разносить газеты, davon — на эти деньги.'),
+  C('Сколько получает DarkFire?',['8 Euro pro Woche','10 Euro pro Monat','30 Euro pro Monat'],'8 Euro pro Woche',{ctx:1}),
+  C('Почему PJ ничего не получает?',['он работает','он маленький','он не хочет'],'он работает',{ctx:1}),
+  C('Какая работа у Sunny?',['разносить газеты','сидеть с детьми','стричь газон'],'разносить газеты',{ctx:1}),
+  C('Что LebHeute покупает на свои деньги?',['сладости и кино','одежду','игры'],'сладости и кино',{ctx:1}),
+  C('«Rasen mähen» — это…',['стричь газон','убирать снег','помогать с уроками'],'стричь газон',{sayAnswer:'Rasen mähen'}),
+  T('Напиши по-немецки: «Это весело.»','Das macht Spaß.',{kb:true}),
+  F('Напиши, на что ты тратишь деньги: «Ich gebe viel Geld für … aus.»',/für .+ aus/i,'Ich gebe viel Geld für Bücher aus.')
+ ]},
+ {id:'u7t',title:'Проверь себя: тема 7',test:true,size:18},
+ {id:'gp1',title:'Große Pause: комикс и диалог',items:[
+  R('Die Nervensäge','Sascha: Hi, wie geht\'s? Was machst du?\nMädchen: Lesen, das siehst du doch.\nSascha: Ich lese auch gern. Was liest du?\nMädchen: Ein Buch!\nSascha: Das seh ich. Interessant?\nMädchen: Weiß ich nicht. Ich kann ja nicht weiterlesen.\nSascha: Ich heiße Sascha, wie heißt du?\nMädchen: Keine Ahnung! Vielleicht Samantha.\nSascha: Ich fahre gern Skateboard. Und du?\nMädchen: Ich lese gern. Aber ich kann nicht. Jemand nervt mich.\nSascha: Du bist aber schlecht drauf. Ich kann auch jonglieren. Ich zeig dir was.','Комикс из учебника, с. 67. die Nervensäge — зануда. Jemand nervt mich — кто-то мне мешает, schlecht drauf — в плохом настроении, ich zeig dir was — сейчас кое-что покажу.'),
+  C('Что делает девочка?',['читает книгу','катается на скейте','жонглирует'],'читает книгу',{ctx:1}),
+  C('Почему она не может читать?',['Саша ей мешает','книга скучная','она устала'],'Саша ей мешает',{ctx:1}),
+  C('Что любит делать Саша?',['кататься на скейтборде','читать','плавать'],'кататься на скейтборде',{ctx:1}),
+  C('«Keine Ahnung!» — это…',['Без понятия!','Нет времени!','Мне жаль!'],'Без понятия!'),
+  R('Eine Verabredung','Paul: Hallo, wie geht\'s?\nLisa: Danke, ganz gut. Und dir?\nPaul: Ja, es geht. Was machst du am Wochenende?\nLisa: Johanna macht eine Party. Sie hat Geburtstag.\nPaul: Wann?\nLisa: Am Samstag. Du kannst ja mitkommen.\nPaul: Echt? Super. Was schenkst du?\nLisa: Gummibärchen und Schokolade. Johanna liebt Gummibärchen.\nPaul: O.k. Ich komme mit. Holst du mich ab?\nLisa: Ja, ich hole dich am Samstag um 7 Uhr ab. Die Party fängt um 8 Uhr an.','Диалог из учебника, с. 68 (имена добавлены). schenken — дарить. В классе его читают на скорость: сначала прочитай медленно и чётко, потом как можно быстрее.'),
+  C('Почему у Йоханны вечеринка?',['у неё день рождения','каникулы','выходные'],'у неё день рождения',{ctx:1}),
+  C('Что Лиза подарит?',['мармеладных мишек и шоколад','книгу','жвачку'],'мармеладных мишек и шоколад',{ctx:1}),
+  C('Во сколько начинается вечеринка?',['um 8 Uhr','um 7 Uhr','um halb acht'],'um 8 Uhr',{ctx:1}),
+  G('Ты можешь пойти с нами.','Du kannst ja ___.','mitkommen'),
+  G('Зайдёшь за мной?','Holst du mich ___?','ab'),
+  O('Собери: «Вечеринка начинается в восемь.»','Die Party fängt um acht an.'),
+  D('Was schenkst du?','Was schenkst du?','Что ты подаришь?'),
+  D('Holst du mich ab?','Holst du mich ab?','Зайдёшь за мной?')
+ ]},
+ {id:'gp2',title:'Große Pause: повторение тем 4–7',test:true,size:24,units:[4,5,6,7]}
+]}
+
+
+];
+var SOON=[['4','Mein Tag','Мой день'],['5','Hobbys','Хобби'],['6','Meine Familie','Моя семья'],['7','Was kostet das?','Сколько это стоит?'],['·','Große Pause','Большая перемена']];
+
+var LESSONS={},RULES={},DICT={};
+function dk(x){return norm(x).toLowerCase()}
+UNITS.forEach(function(u){u.lessons.forEach(function(l){l.unit=u;LESSONS[l.id]=l;
+  (l.items||[]).forEach(function(it){
+    if(it.t==='rule'&&!RULES[l.id])RULES[l.id]={title:it.title,html:it.html};
+    if(it.t==='learn'){DICT[dk(it.de)]=it.ru;var parts=it.de.split(' — ');if(parts.length===2){var rp=it.ru.split(' — ');DICT[dk(parts[0])]=rp[0];if(rp[1])DICT[dk(parts[1])]=rp[1]}
+      var m=it.de.match(/^(der|das|die) (.+)$/);if(m)DICT[dk(m[2])]=it.ru}
+  })})});
+function hasCyr(x){return /[а-яё]/i.test(String(x))}
+function quoted(q){var m=String(q||'').match(/«([^»]+)»/);return m&&hasCyr(m[1])?m[1]:null}
+function trOf(it,de){
+  if(it.tr)return it.tr;
+  var t=it.t,r=null;
+  if(de&&DICT[dk(de)])return DICT[dk(de)];
+  if(t==='art')return it.ru;
+  if(t==='num')return String(it.n);
+  if(t==='conj'){var pr=it.p===5?'sie':it.p===6?'Sie':it.shown==='sie'&&it.p===2?'sie3':it.shown==='es'?'es':it.shown;return PRON_RU[pr]+' + '+it.v+' ('+VERBS[it.v].ru+')'}
+  if(t==='listen')return(it.dec||it.digits||/напиши|послушай|по буквам/i.test(it.ru))?null:it.ru;
+  if(t==='gap')return hasCyr(it.q)&&!/^Чей\?/.test(it.q)?it.q:null;
+  if(t==='type'||t==='order')return quoted(it.q);
+  if(t==='choice'){if(it.sub&&hasCyr(it.sub))return it.sub;r=quoted(it.q);if(r)return r;if(hasCyr(it.a))return it.a;return null}
+  return null;
+}
+
+function gradeable(it){return it.t!=='learn'&&it.t!=='rule'&&it.t!=='read'&&it.t!=='free'}
+function expand(items,lid){var out=[];items.forEach(function(it){if(it.t==='gen')out=out.concat(GENS[it.kind](it).map(function(x){x.lid=lid;return x}));else{if(gradeable(it))it.lid=lid;out.push(it)}});return out}
+var PER=5,MAXG=10,LISTY={art:1,artType:1,plural:1,akk:1,ein:1,mein:1};
+function lkeys(it){var out=[];it.de.split(' — ').forEach(function(a){a.split(' → ').forEach(function(b){b.split(' / ').forEach(function(c){c=c.replace(/^(der|das|die) /,'');var k=dk(c);if(k.length>=3)out.push(k)})})});return out}
+function nounOf(it){var m=it.de.match(/^(der|das|die) ([^ \/→—]+)/);return m?m[2]:null}
+function itemText(it){var a=[];['s','say','sayAnswer','text','w'].forEach(function(k){if(it[k])a.push(it[k])});if(it.a)a=a.concat(it.a);if(it.opts)a=a.concat(it.opts);return dk(a.join(' '))}
+function gcount(arr){return arr.reduce(function(n,it){return n+(it.t==='gen'?it.n:gradeable(it)?1:0)},0)}
+function makeParts(l){
+  if(l.test)return[null];
+  var rules=[],learns=[],rest=[];
+  l.items.forEach(function(it){if(it.t==='rule')rules.push(it);else if(it.t==='learn')learns.push(it);else rest.push(it)});
+  var n=learns.length,P=Math.max(1,Math.round(n/PER)),chunks=[];
+  for(var p=0;p<P;p++)chunks.push(learns.slice(Math.round(p*n/P),Math.round((p+1)*n/P)));
+  var keys=chunks.map(function(c){return c.reduce(function(a,it){return a.concat(lkeys(it))},[])});
+  var cum=[],acc=[];chunks.forEach(function(c){c.forEach(function(it){var w=nounOf(it);if(w)acc.push(w)});cum.push(acc.slice())});
+  var bins=chunks.map(function(){return[]});
+  var groups=[];rest.forEach(function(it){if(it.ctx&&groups.length&&groups[groups.length-1].read)groups[groups.length-1].items.push(it);else groups.push({items:[it],read:it.t==='read'})});
+  groups.forEach(function(g){var it=g.items[0];
+    if(it.t==='gen'){
+      var listy=LISTY[it.kind]&&acc.length>=3;
+      var parts=[];for(var k=0;k<P;k++)if(!listy||cum[k].length>=2)parts.push(k);
+      var each=Math.max(1,Math.ceil(it.n/parts.length));
+      parts.forEach(function(k){var c={};for(var x in it)c[x]=it[x];c.n=each;if(listy)c.only=cum[k];bins[k].push(c)});return}
+    if(g.read||it.t==='free'){bins[P-1]=bins[P-1].concat(g.items);return}
+    var txt=itemText(it),idx=-1;keys.forEach(function(ks,ci){if(ks.some(function(k){return txt.indexOf(k)>=0}))idx=ci});
+    if(idx<0){idx=0;for(var k2=1;k2<P;k2++)if(gcount(bins[k2])<=gcount(bins[idx]))idx=k2}
+    bins[idx]=bins[idx].concat(g.items)});
+  var out=[];
+  for(var k=0;k<P;k++){
+    var head=(k===0?rules:rules.map(function(r){return{t:'rule',title:r.title,html:r.html,recap:true}})).concat(chunks[k]);
+    var cur=[],gc=0,first=true;
+    var gs=[];bins[k].forEach(function(it){if(it.ctx&&gs.length&&gs[gs.length-1][0].t==='read')gs[gs.length-1].push(it);else gs.push([it])});
+    gs.forEach(function(g){var c=gcount(g);if(gc+c>MAXG&&gc>=4){out.push({items:(first?head:head.filter(function(x){return x.t==='rule'}).map(function(r){return{t:'rule',title:r.title,html:r.html,recap:true}})).concat(cur),extra:!first});first=false;cur=[];gc=0}cur=cur.concat(g);gc+=c});
+    if(!first&&gc<4){out[out.length-1].items=out[out.length-1].items.concat(cur)}else out.push({items:(first?head:rules.map(function(r){return{t:'rule',title:r.title,html:r.html,recap:true}})).concat(cur),extra:!first});
+  }
+  return out;
+}
+function buildPart(pt){
+  if(pt.test){var l=pt.lesson,sz=l.size;l.size=Math.min(sz,12);var r=buildLesson(l);l.size=sz;return r}
+  return expand(pt.items,pt.lesson.id);
+}
+function buildLesson(l){
+  if(l.test){
+    var pool=[];var src=l.units?UNITS.filter(function(u){return l.units.indexOf(u.n)>=0}).reduce(function(a,u){return a.concat(u.lessons)},[]):l.unit.lessons;src.forEach(function(x){if(x.items)pool=pool.concat(expand(x.items,x.id).filter(function(it){return gradeable(it)&&!it.ctx}))});
+    return pick(pool,l.size);
+  }
+  /* keep a reading's following questions attached; otherwise keep authored order */
+  return expand(l.items,l.id);
+}
+
+/* ---------- state & rendering ---------- */
+var app=document.getElementById('app');
+var S={view:'home'};
+var lastTick=null;
+function tick(){var now=Date.now();if(lastTick){var d=Math.min(now-lastTick,120000);var k=todayKey();DB.minutes[k]=(DB.minutes[k]||0)+d/60000}lastTick=now}
+function minutesToday(){return Math.floor(DB.minutes[todayKey()]||0)}
+
+var PARTS=[],PARTMAP={};
+UNITS.forEach(function(u){u.lessons.forEach(function(l){var ps=makeParts(l);l.parts=ps.map(function(x,k){
+  var id=ps.length===1?l.id:l.id+'.'+(k+1);var o={id:id,k:k+1,n:ps.length,lesson:l,unit:u,test:!!l.test,items:x?x.items:null,extra:x&&x.extra,
+    title:l.title+(ps.length>1?' · часть '+(k+1)+' из '+ps.length:'')};PARTS.push(o);PARTMAP[id]=o;return o})})});
+(function(){var ch=false;UNITS.forEach(function(u){u.lessons.forEach(function(l){var old=DB.progress[l.id];if(old&&l.parts.length>1)l.parts.forEach(function(pt){if(!DB.progress[pt.id]){DB.progress[pt.id]={best:old.best,last:old.last};ch=true}})})});if(ch)save()})();
+function lessonStatus(id){var p=DB.progress[id];if(!p)return null;return p}
+function firstOpen(){for(var i=0;i<PARTS.length;i++)if(!DB.progress[PARTS[i].id])return PARTS[i];return null}
+
+
+function dayKey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function ruDate(d,y){try{return d.toLocaleDateString('ru-RU',y?{day:'numeric',month:'long',year:'numeric'}:{day:'numeric',month:'long'})}catch(e){return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear()}}
+function allLessons(){var a=[];UNITS.forEach(function(u){u.lessons.forEach(function(l){a.push(l)})});return a}
+function plural(n,a,b,c){var m=n%10,mm=n%100;if(m===1&&mm!==11)return a;if(m>=2&&m<=4&&(mm<10||mm>=20))return b;return c}
+function statsHtml(){
+  var now=new Date(),mins=DB.minutes,total=0,days=0;
+  Object.keys(mins).forEach(function(k){total+=mins[k];if(mins[k]>=1)days++});
+  var y=new Date(now.getTime()-864e5);
+  var today=Math.floor(mins[dayKey(now)]||0),yest=Math.floor(mins[dayKey(y)]||0);
+  var all=PARTS,done=all.filter(function(l){return DB.progress[l.id]}).length;
+  var h='<section class="stats"><h2>Статистика</h2>';
+  h+='<div class="save '+(cloudState==='cloud'?'ok':(cloudState==='checking'||STANDALONE)?'':'warn')+'">'+(cloudState==='cloud'?'Прогресс сохраняется в аккаунте claude.ai и не пропадёт.':cloudState==='checking'?'Проверяю, где сохраняется прогресс…':STANDALONE?'Прогресс хранится в этом браузере. Чтобы Safari его не стирал, добавьте тренажёр на экран «Домой» и иногда сохраняйте резервную копию в файл (внизу страницы).':cloudState==='denied'?'Этот аккаунт не может сохранять прогресс в тренажёре. Прогресс хранится только в браузере и может пропасть.':'Прогресс хранится только в этом браузере, и Safari может его стереть. Чтобы он не пропадал, войдите на этом устройстве в claude.ai и откройте тренажёр снова.')+'</div>';
+  if(!DB.start){h+='<p class="muted small" style="margin:0">Здесь появятся дни, минуты и прогноз после первого занятия.</p></section>';return h}
+  var start=new Date(DB.start),weeks=Math.max(1,(now-start)/(7*864e5));
+  var tiles=[['Начало занятий',ruDate(start,true)],['Дней с занятиями',String(days)],['Сегодня',today+' мин'],['Вчера',yest+' мин'],['В среднем за неделю',Math.round(total/weeks)+' мин'],['Пройдено частей',done+' из '+all.length]];
+  h+='<div class="tiles-grid">'+tiles.map(function(t){return '<div class="tile-s"><div class="k">'+t[0]+'</div><div class="v">'+esc(t[1])+'</div></div>'}).join('')+'</div>';
+  if(done>=2&&days>=2){
+    var pace=done/weeks;
+    var left=all.length-done,wk=left/pace,fin=new Date(now.getTime()+wk*7*864e5);
+    h+='<div class="forecast"><b>Прогноз.</b> Темп: '+String(Math.round(pace*10)/10).replace('.',',')+' части в неделю.<br>Учебник A1.1 будет пройден примерно к '+esc(ruDate(fin,true));
+    var nx=firstOpen();
+    if(nx&&nx.unit){var ul=PARTS.filter(function(x){return x.unit===nx.unit}),ul2=ul.filter(function(l){return !DB.progress[l.id]}).length;var fu=new Date(now.getTime()+ul2/pace*7*864e5);
+      h+='<br>Тема '+nx.unit.n+' «'+esc(nx.unit.title)+'» — примерно к '+esc(ruDate(fu))}
+    h+='</div>';
+  }else h+='<div class="forecast muted">Прогноз, когда будет пройден учебник, появится после двух частей в разные дни.</div>';
+  return h+'</section>';
+}
+function home(){
+  S={view:'home'};lastTick=null;
+  var m=minutesToday(),pct=Math.min(100,m/20*100);
+  var next=firstOpen();
+  var h='<div class="stack">'
+   +'<div class="hero"><div class="eyebrow">Немецкий · Prima plus A1.1</div><h1>Тренажёр по учебнику</h1>'
+   +'<p class="muted" style="margin:0">Каждый урок разбит на короткие части по 5 минут: в каждой — несколько новых слов и задания только на них. Одно занятие — 20 минут, это 3–4 части.</p></div>'
+   +'<div class="today"><div class="meter"><div class="row" style="justify-content:space-between"><b>Сегодня</b><span class="muted small" style="font-variant-numeric:tabular-nums">'+m+' из 20 мин</span></div><div class="bar" style="margin-top:8px"><i style="width:'+pct+'%"></i></div></div>'
+   +(next?'<button class="btn" data-go="'+next.id+'">Продолжить: '+esc(next.title)+'</button>':'')+'</div>';
+  h+=statsHtml();
+  if(DB.mistakes.length)h+='<button class="btn ghost wide" data-act="mist">Работа над ошибками · '+DB.mistakes.length+'</button>';
+  UNITS.forEach(function(u){
+    h+='<section class="unit"><div class="unit-head"><div class="tag">'+u.n+'</div><div class="t"><h2>'+esc(u.title)+'</h2><div class="muted small">'+esc(u.ru)+' · учебник '+u.pages+'</div></div></div><div class="lessons">';
+    var li=0;u.lessons.forEach(function(l){if(!l.test)li++;
+      var ps=l.parts,dn=ps.filter(function(x){return DB.progress[x.id]}),nx=ps.find(function(x){return !DB.progress[x.id]})||ps[0];
+      var avg=dn.length?Math.round(dn.reduce(function(a,x){return a+DB.progress[x.id].best},0)/dn.length):0;
+      var pill=dn.length===ps.length?'<span class="pill '+(avg>=80?'done':'mid')+'">'+(avg>=80?'пройден':'повторить')+' · '+avg+'%</span>':dn.length?'<span class="pill mid">'+dn.length+' из '+ps.length+'</span>':'<span class="pill">'+(ps.length>1?ps.length+' '+plural(ps.length,'часть','части','частей'):'~5 мин')+'</span>';
+      h+='<div class="lrow"><button class="lesson" data-go="'+nx.id+'"><span class="n">'+(l.test?'✓':li)+'</span><span class="body"><span class="title">'+esc(l.title)+'</span></span>'+pill+'</button>';
+      if(ps.length>1)h+='<div class="chips">'+ps.map(function(x){var pr=DB.progress[x.id];return '<button class="chip'+(pr?(pr.best>=80?' done':' mid'):'')+'" data-go="'+x.id+'" aria-label="Часть '+x.k+'">'+x.k+'</button>'}).join('')+'</div>';
+      h+='</div>'});
+    h+='</div><div class="links"><button class="linkbtn" data-words="'+u.n+'">Словарик темы '+u.n+'</button></div></section>';
+  });
+  if(STANDALONE)h+='<section class="stats"><h2>Резервная копия</h2><p class="small muted" style="margin:0">Файл с прогрессом: пройденные части, минуты и ошибки. Если прогресс пропадёт, загрузите файл обратно — ничего не потеряется.</p><div class="row"><button class="btn ghost" data-act="exp">Сохранить в файл</button><button class="btn ghost" data-act="imp">Загрузить из файла</button><input type="file" id="impFile" accept=".json,application/json" hidden></div><div class="small" id="impMsg"></div></section>';
+  h+='<section class="stats"><h2>Озвучка</h2><label class="small muted" for="voiceSel">Немецкий голос на этом устройстве. ★ — улучшенный, звучит естественнее.</label><div class="row"><select id="voiceSel" class="vsel"></select><button class="btn ghost" data-act="vtest">Проверить</button></div></section>';
+  h+='</div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  var vs=document.getElementById('voiceSel');fillVoices(vs);vs.onchange=function(){deVoice=DEVOICES.find(function(v){return v.voiceURI===vs.value})||deVoice;try{localStorage.setItem('primaplus-voice',vs.value)}catch(e){}say('Hallo! Wie geht es dir?')};
+  var ex=app.querySelector('[data-act="exp"]');if(ex){
+    ex.onclick=function(){var d=new Date(),n='prima-progress-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()+'.json';
+      var b=new Blob([JSON.stringify(DB)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove()},1000)};
+    var fi=document.getElementById('impFile');app.querySelector('[data-act="imp"]').onclick=function(){fi.click()};
+    fi.onchange=function(){var f=fi.files&&fi.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var msg=document.getElementById('impMsg');
+      try{var x=JSON.parse(r.result);if(!x||typeof x!=='object'||!x.progress)throw 0;var m=mergeDB(DB,x);DB.progress=m.progress;DB.minutes=m.minutes;if(!DB.mistakes.length)DB.mistakes=m.mistakes;if(m.start)DB.start=m.start;save();home();
+        var mm=document.getElementById('impMsg');if(mm)mm.textContent='Прогресс загружен.'}catch(e){if(msg)msg.textContent='Это не файл прогресса тренажёра. Выберите файл, который начинается с prima-progress.'}};r.readAsText(f)}}
+  app.querySelector('[data-act="vtest"]').onclick=function(){say('Hallo! Ich heiße Anna. Wie heißt du?')};
+  app.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){start(PARTMAP[b.dataset.go])}});
+  app.querySelectorAll('[data-words]').forEach(function(b){b.onclick=function(){words(+b.dataset.words)}});
+  var mb=app.querySelector('[data-act="mist"]');if(mb)mb.onclick=startMistakes;
+}
+
+function words(n){
+  var u=UNITS[n-1],seen={},list=[];
+  u.lessons.forEach(function(l){(l.items||[]).forEach(function(it){if(it.t==='learn'&&!seen[it.de]&&!/^[A-Z](-[A-Z])+$/.test(it.de)){seen[it.de]=1;list.push(it)}})});
+  var h='<div class="topbar"><button class="x" data-act="home" aria-label="Назад">←</button><h2 style="flex:1">Словарик: '+esc(u.title)+'</h2></div>'
+   +'<p class="muted small" style="margin-top:0">Нажми на строку, чтобы послушать.</p><div class="wl">';
+  list.forEach(function(it,i){h+='<button data-i="'+i+'"><span class="w">'+colorArt(it.de)+'</span><span class="r">'+esc(it.ru)+'</span></button>'});
+  h+='</div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  app.querySelector('[data-act="home"]').onclick=home;
+  app.querySelectorAll('.wl button').forEach(function(b){b.onclick=function(){say(list[+b.dataset.i].de)}});
+}
+
+function strip(it){var o={};for(var k in it)if(k.charAt(0)!=='_')o[k]=it[k];return o}
+function clone(it){return JSON.parse(JSON.stringify(it))}
+function start(l){
+  if(!DB.start){DB.start=Date.now();save()}
+  var items=buildPart(l);
+  var rev=DB.mistakes.slice(0,5).map(function(m){var c=clone(m.item);c._rev=true;return c});
+  items=rev.concat(items);
+  S={view:'lesson',lesson:l,items:items,i:0,total:items.filter(gradeable).length,right:0,wrongs:[],retry:[],answered:false,mist:false};
+  lastTick=Date.now();renderItem();
+}
+function startMistakes(){
+  if(!DB.start){DB.start=Date.now();save()}
+  var items=shuffle(DB.mistakes.map(function(m){return m.item})).slice(0,15);
+  S={view:'lesson',lesson:{id:'_mist',title:'Работа над ошибками'},items:items,i:0,total:items.length,right:0,wrongs:[],retry:[],answered:false,mist:true};
+  lastTick=Date.now();renderItem();
+}
+function itemKey(it){return JSON.stringify(strip(it))}
+function addMistake(it){var k=itemKey(it);if(DB.mistakes.some(function(m){return m.k===k}))return;DB.mistakes.push({k:k,item:strip(it)});if(DB.mistakes.length>80)DB.mistakes.shift();save()}
+function removeMistake(it){var k=itemKey(it);DB.mistakes=DB.mistakes.filter(function(m){return m.k!==k});save()}
+
+function speakBtn(text,huge,label){return '<button class="say'+(huge?' huge':'')+'" data-say="'+esc(text)+'">'+SPK+'<span>'+(label||'Послушать')+'</span></button>'}
+function slowBtn(text){return '<button class="say" data-slow="'+esc(text)+'">'+SNAIL+'<span>Медленно</span></button>'}
+function keys(){return '<div class="keys">'+['ä','ö','ü','ß','Ä','Ö','Ü'].map(function(k){return '<button class="key" data-key="'+k+'">'+k+'</button>'}).join('')+'</div>'}
+function inputHtml(opts){opts=opts||{};return '<input class="answer" id="ans" type="text" autocomplete="off" autocorrect="off" autocapitalize="'+(opts.cap?'sentences':'none')+'" spellcheck="false" '+(opts.dec?'inputmode="decimal"':opts.num?'inputmode="numeric" pattern="[0-9]*"':'')+' placeholder="'+(opts.ph||'Пиши здесь')+'">'}
+
+function renderItem(){
+  tick();
+  if(S.i>=S.items.length){
+    return finish();
+  }
+  var it=S.items[S.i];S.answered=false;S.cur=it;
+  var done=S.i, all=S.items.length;
+  var h='<div class="topbar"><button class="x" data-act="quit" aria-label="Выйти">✕</button><div class="bar"><i style="width:'+(done/all*100)+'%"></i></div><span class="count">'+(done+1)+'/'+all+'</span></div><div class="card" id="card">';
+  var t=it.t, autoSay=null;
+  if(t==='rule'&&it.recap){
+    h+='<div class="kind">Напоминание</div><h2>'+esc(it.title)+'</h2><details class="rulebox"><summary>Показать правило ещё раз</summary><div class="rule">'+it.html+'</div></details><button class="btn wide" data-act="next">Дальше</button>';
+  }else if(t==='rule'){
+    h+='<div class="kind">Правило</div><h2>'+esc(it.title)+'</h2><div class="rule">'+it.html+'</div><button class="btn wide" data-act="next">Понятно</button>';
+  }else if(t==='learn'){
+    var spelled=/^[A-Z](-[A-Z])+$/.test(it.de);
+    h+='<div class="kind">Новое</div><div class="de big">'+colorArt(it.de)+'</div><div class="ru">'+esc(it.ru)+'</div>'+(it.note?'<div class="note">'+esc(it.note)+'</div>':'')
+      +'<div class="row">'+speakBtn(spelled?it.de.split('-').join(', '):it.de)+slowBtn(spelled?it.de.split('-').join(', '):it.de)+'</div><button class="btn wide" data-act="next">Дальше</button>';
+    autoSay=spelled?it.de.split('-').join(', '):it.de;
+  }else if(t==='read'){
+    h+='<div class="kind">Читаем</div><h2>'+esc(it.title)+'</h2><div class="sub">'+esc(it.ru)+'</div><div class="reading">'+esc(it.text)+'</div><div class="row">'+speakBtn(it.text,false,'Послушать текст')+slowBtn(it.text)+'</div><button class="btn wide" data-act="next">Прочитала</button>';
+  }else if(t==='choice'){
+    h+='<div class="kind">Выбери</div>';
+    if(it.hide){h+='<div class="q">'+esc(it.q)+'</div><div class="row">'+speakBtn(it.say,true)+slowBtn(it.say)+'</div>';autoSay=it.say}
+    else{h+='<div class="q">'+esc(it.q)+'</div>'+(it.sub?'<div class="sub">'+esc(it.sub)+'</div>':'')+(it.say?'<div class="row">'+speakBtn(it.say)+'</div>':'')}
+    h+='<div class="opts">'+shuffle(it.opts).map(function(o){return '<button class="opt" data-opt="'+esc(o)+'">'+esc(o)+'</button>'}).join('')+'</div>';
+  }else if(t==='art'){
+    h+='<div class="kind">Артикль</div><div class="q">Какой артикль?</div><div class="de big">___ '+esc(it.w)+'</div><div class="ru">'+esc(it.ru)+'</div>'
+      +'<div class="arts">'+['der','das','die'].map(function(a){return '<button class="opt '+a+'" data-opt="'+a+'">'+a+'</button>'}).join('')+'</div>';
+  }else if(t==='conj'){
+    var v=VERBS[it.v];
+    var pr=it.shown==='sie'&&it.p===2?'sie3':it.shown==='es'?'es':it.shown;
+    if(it.p===5)pr='sie';if(it.p===6)pr='Sie';
+    h+='<div class="kind">Глагол</div><div class="q">Поставь глагол в нужную форму</div><div class="sub">'+esc(it.v)+' — '+esc(v.ru)+'</div>'
+      +'<div class="sentence">'+esc(it.shown)+' <span class="blank">?</span> <span class="muted small">('+esc(PRON_RU[pr])+')</span></div>'+inputHtml({ph:'форма глагола'})+keys()+'<button class="btn wide" data-act="check">Проверить</button>';
+  }else if(t==='gap'){
+    h+='<div class="kind">Вставь слово</div><div class="sub">'+esc(it.q)+'</div><div class="sentence">'+esc(it.s).replace('___','<span class="blank">?</span>')+'</div>'+inputHtml({ph:'одно слово'})+keys()+'<button class="btn wide" data-act="check">Проверить</button>';
+  }else if(t==='type'){
+    h+='<div class="kind">Напиши</div><div class="q">'+esc(it.q)+'</div>'+(it.hint?'<div class="sub">Подсказка: '+esc(it.hint)+'</div>':'')+inputHtml({cap:true})+keys()+'<div class="actions"><button class="btn ghost" data-act="show">Не знаю</button><button class="btn" data-act="check">Проверить</button></div>';
+  }else if(t==='listen'){
+    h+='<div class="kind">Диктант</div><div class="q">'+esc(it.ru)+'</div><div class="row">'+speakBtn(it.say,true)+slowBtn(it.say)+'</div>'+inputHtml({cap:!it.digits&&!it.dec,num:it.digits,dec:it.dec,ph:it.dec?'например 1,50':it.digits?'цифры':'Пиши, что слышишь'})+(it.digits||it.dec?'':keys())+'<div class="actions"><button class="btn ghost" data-act="show">Не знаю</button><button class="btn" data-act="check">Проверить</button></div>';
+    autoSay=it.slow?null:it.say; if(it.slow)S.autoSlow=it.say;
+  }else if(t==='num'){
+    if(it.mode==='hear'){h+='<div class="kind">Число на слух</div><div class="q">Послушай и напиши число цифрами</div><div class="row">'+speakBtn(numDe(it.n),true)+slowBtn(numDe(it.n))+'</div>'+inputHtml({num:true,ph:'цифры'})+'<button class="btn wide" data-act="check">Проверить</button>';autoSay=numDe(it.n)}
+    else h+='<div class="kind">Число словом</div><div class="q">Напиши число по-немецки, одним словом</div><div class="de big" style="font-variant-numeric:tabular-nums">'+it.n+'</div>'+inputHtml({ph:'например: einundzwanzig'})+keys()+'<div class="actions"><button class="btn ghost" data-act="show">Не знаю</button><button class="btn" data-act="check">Проверить</button></div>';
+  }else if(t==='order'){
+    var tiles=it.tiles||norm(it.a).split(' ');
+    S.picked=[];S.tiles=shuffle(tiles.map(function(w,i){return{w:w,i:i}}));
+    h+='<div class="kind">Собери фразу</div><div class="q">'+esc(it.q)+'</div><div class="tiles target" id="tgt"></div><div class="tiles" id="src">'
+      +S.tiles.map(function(x,k){return '<button class="tile" data-tile="'+k+'">'+esc(x.w)+'</button>'}).join('')+'</div><div class="actions"><button class="btn ghost" data-act="clear">Сначала</button><button class="btn" data-act="check">Проверить</button></div>';
+  }else if(t==='free'){
+    h+='<div class="kind">Напиши сама</div><div class="q">'+esc(it.q)+'</div><div class="sub">Например: '+esc(it.example)+'</div>'+inputHtml({cap:true})+keys()+'<button class="btn wide" data-act="check">Готово</button>';
+  }
+  h+='</div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  bind();
+  if(autoSay)say(autoSay); else if(S.autoSlow){say(S.autoSlow,true);S.autoSlow=null}
+  var inp=document.getElementById('ans');
+  if(inp&&!('ontouchstart' in window))inp.focus();
+}
+
+function bind(){
+  app.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){say(b.dataset.say)}});
+  app.querySelectorAll('[data-slow]').forEach(function(b){b.onclick=function(){say(b.dataset.slow,true)}});
+  app.querySelectorAll('[data-key]').forEach(function(b){
+    b.addEventListener('pointerdown',function(e){e.preventDefault()});
+    b.onclick=function(){var inp=document.getElementById('ans');if(!inp)return;var s=inp.selectionStart==null?inp.value.length:inp.selectionStart,e=inp.selectionEnd==null?s:inp.selectionEnd;
+      inp.value=inp.value.slice(0,s)+b.dataset.key+inp.value.slice(e);inp.focus();try{inp.setSelectionRange(s+1,s+1)}catch(x){}}});
+  var q=app.querySelector('[data-act="quit"]');if(q)q.onclick=function(){tick();save();home()};
+  app.querySelectorAll('[data-act="next"]').forEach(function(b){b.onclick=next});
+  var c=app.querySelector('[data-act="check"]');if(c)c.onclick=submit;
+  var sh=app.querySelector('[data-act="show"]');if(sh)sh.onclick=function(){if(S.answered)return;grade(false,null,'Ничего страшного. Запомни ответ — это задание вернётся в конце урока.')};
+  var inp=document.getElementById('ans');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(S.answered)next();else submit()}});
+  app.querySelectorAll('[data-opt]').forEach(function(b){b.onclick=function(){if(S.answered)return;
+    var it=S.cur,ok=b.dataset.opt===it.a;
+    b.classList.add(ok?'right':'wrong');
+    if(!ok)app.querySelectorAll('[data-opt]').forEach(function(x){if(x.dataset.opt===it.a)x.classList.add('right')});
+    grade(ok)}});
+  if(S.cur&&S.cur.t==='order'){
+    app.querySelectorAll('[data-tile]').forEach(function(b){b.onclick=function(){if(S.answered)return;var k=+b.dataset.tile;S.picked.push(k);b.classList.add('used');drawTarget()}});
+    var cl=app.querySelector('[data-act="clear"]');if(cl)cl.onclick=function(){if(S.answered)return;S.picked=[];app.querySelectorAll('[data-tile]').forEach(function(b){b.classList.remove('used')});drawTarget()};
+  }
+}
+function drawTarget(){
+  var t=document.getElementById('tgt');
+  t.innerHTML=S.picked.map(function(k,j){return '<button class="tile" data-back="'+j+'">'+esc(S.tiles[k].w)+'</button>'}).join('');
+  t.querySelectorAll('[data-back]').forEach(function(b){b.onclick=function(){if(S.answered)return;var j=+b.dataset.back,k=S.picked[j];S.picked.splice(j,1);
+    app.querySelector('[data-tile="'+k+'"]').classList.remove('used');drawTarget()}});
+}
+
+function answersOf(it){
+  if(it.t==='conj')return[VERBS[it.v].f[it.p]];
+  if(it.t==='num')return it.mode==='hear'?[String(it.n)]:numVariants(it.n);
+  if(it.t==='order')return[it.a];
+  return(it.a||[]).concat(it.alt||[]);
+}
+function deText(it){ /* the German to speak after answering */
+  if(it.sayAnswer)return it.sayAnswer;
+  if(it.t==='gap')return it.s.replace('___',it.a[0]);
+  if(it.t==='conj')return(it.shown==='Sie'?'Sie':it.shown)+' '+VERBS[it.v].f[it.p];
+  if(it.t==='art')return it.a+' '+it.w;
+  if(it.t==='num')return numDe(it.n);
+  if(it.t==='listen'&&it.dec)return it.say;
+  if(it.t==='type'||it.t==='listen')return it.digits?null:it.a[0];
+  if(it.t==='order')return it.a;
+  if(it.t==='choice'&&it.say)return it.say;
+  if(it.t==='choice'&&!hasCyr(it.a)&&!/^\d/.test(it.a))return it.a;
+  return null;
+}
+function submit(){
+  if(S.answered){next();return}
+  var it=S.cur,inp=document.getElementById('ans');
+  if(it.t==='free'){
+    var v=norm(inp.value);if(!v)return;
+    var ok=it.re.test(v.replace(/ss/g,'ß'))||it.re.test(v);
+    S.answered=true;
+    sheet(ok?'ok':'warn',ok?'Отлично!':'Принято',ok?'Проверь сама: имена и существительные — с большой буквы, глагол на втором месте.':'Попробуй начать так, как в примере: '+it.example,null);
+    say(inp.value);return;
+  }
+  if(it.t==='order'){
+    if(!S.picked.length)return;
+    var built=S.picked.map(function(k){return S.tiles[k].w}).join(it.join?'':' ');
+    var good=norm(built)===norm(it.a);
+    return grade(good);
+  }
+  if(!inp||!norm(inp.value))return;
+  var r=check(inp.value,answersOf(it));
+  inp.classList.add(r.res==='ok'?'ok':'no');
+  grade(r.res==='ok',r.msg);
+}
+function grade(ok,msg,forceMsg){
+  var it=S.cur;S.answered=true;
+  var first=!it._retry&&!it._rev;
+  if(ok){if(first)S.right++;if(S.mist||it._rev)removeMistake(it)}
+  else{
+    if(first){S.wrongs.push(it);addMistake(it)}
+    var n=it._n||0;
+    if(n<2){var c1=clone(strip(it));c1._retry=true;c1._n=n+1;S.items.splice(S.i+1,0,c1);
+      if(n===0){var c2=clone(strip(it));c2._retry=true;c2._n=1;S.items.splice(Math.min(S.items.length,S.i+5),0,c2)}}
+  }
+  var a=answersOf(it);
+  var answer=it.t==='choice'?it.a:it.t==='art'?it.a+' '+it.w:(it.t==='conj'?(it.shown+' '+a[0]):a[0]);
+  var de=deText(it);
+  var explain=it.explain||'';
+  if(it.t==='conj'){var v=VERBS[it.v];explain='Вся таблица: ich '+v.f[0]+', du '+v.f[1]+', er/sie '+v.f[2]+', wir '+v.f[3]+', ihr '+v.f[4]+', sie/Sie '+v.f[5]+'.'}
+  if(it.t==='art'){explain=it.a+' '+it.w+' — '+(it.pl?'множественное число, всегда die':ARTRU[it.a])+'.'}
+  var ru=trOf(it,de);if(!ru&&it.t!=='choice')ru=DICT[dk(answer)]||null;
+  if(ru&&de&&dk(ru)===dk(de))ru=null;
+  if(ru&&!ok&&dk(ru)===dk(answer))ru=null;
+  sheet(ok?'ok':'bad',ok?'Верно!':'Пока не так',{answer:ok?null:(de&&dk(de)===dk(answer)?null:answer),de:de||(ok?null:null),ru:ru,why:explain,msg:[forceMsg,msg].filter(Boolean).join(' '),rule:RULES[it.lid],ok:ok,raw:(!de&&!ok)?answer:null});
+  if(de)say(de);
+  tick();
+}
+function sheet(kind,head,info,answer){
+  var el=document.createElement('div');el.className='sheet '+kind;
+  var h='<div class="in"><div class="head">'+esc(head)+'</div>';
+  if(info&&typeof info==='object'){
+    if(info.answer)h+='<div>Правильно: <span class="right">'+colorArt(info.answer)+'</span></div>';
+    if(info.raw&&!info.answer)h+='<div>Правильно: <span class="right">'+colorArt(info.raw)+'</span></div>';
+    if(info.de)h+='<div class="pairline"><button class="say mini" data-say="'+esc(info.de)+'" aria-label="Послушать">'+SPK+'</button><span class="right">'+colorArt(info.de)+'</span></div>';
+    if(info.ru)h+='<div class="trline"><span class="lbl">Перевод</span> '+esc(info.ru)+'</div>';
+    if(info.msg)h+='<div>'+esc(info.msg)+'</div>';
+    if(info.why)h+='<div class="trline"><span class="lbl">Почему</span> '+esc(info.why)+'</div>';
+    if(info.rule)h+='<details class="rulebox"><summary>Правило: '+esc(info.rule.title)+'</summary><div class="rule">'+info.rule.html+'</div></details>';
+  }else{
+    if(answer)h+='<div>Правильно: <span class="right">'+colorArt(answer)+'</span></div>';
+    if(info)h+='<div>'+esc(info)+'</div>';
+  }
+  el.innerHTML=h+'<button class="btn wide" id="nextBtn">Дальше</button></div>';
+  el.querySelectorAll('[data-say]').forEach(function(b){b.onclick=function(){say(b.dataset.say)}});
+  document.body.appendChild(el);
+  var nb=document.getElementById('nextBtn');nb.onclick=next;
+  if(!('ontouchstart' in window))nb.focus();
+}
+function next(){
+  var s=document.querySelector('.sheet');if(s)s.remove();
+  S.i++;renderItem();
+}
+function finish(){
+  tick();
+  var l=S.lesson,pct=S.total?Math.round(S.right/S.total*100):100;
+  if(!S.mist){var p=DB.progress[l.id]||{best:0};p.best=Math.max(p.best||0,pct);p.last=todayKey();DB.progress[l.id]=p}
+  save();
+  var nxt=null;
+  if(!S.mist){var ix=PARTS.indexOf(l);nxt=PARTS[ix+1]||null}
+  var h='<div class="stack" style="padding-top:20px"><div class="card"><div class="kind">'+(S.mist?'Работа над ошибками':(l.n>1&&l.k<l.n?'Часть пройдена':'Урок закончен'))+'</div><h2>'+esc(l.title)+'</h2>'
+   +'<div class="result">'+pct+'%</div><div class="muted">С первого раза верно: '+S.right+' из '+S.total+'. Сегодня занималась '+minutesToday()+' мин.</div>';
+  if(S.wrongs.length){h+='<div class="note"><b>Над чем поработать:</b><br>'+S.wrongs.slice(0,8).map(function(it){var a=answersOf(it)[0];var d=deText(it)||a;return esc(d)}).join('<br>')+'</div><div class="muted small">Эти задания сохранились в «Работе над ошибками».</div>'}
+  h+='<div class="actions">'+(S.mist?'':'<button class="btn ghost" data-act="again">Ещё раз</button>')+(nxt?'<button class="btn" data-act="nextLesson">'+(nxt.lesson===l.lesson?'Дальше: часть '+nxt.k:'Следующий урок')+'</button>':'')+'</div><button class="btn ghost wide" data-act="home">К темам</button></div></div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  var a=app.querySelector('[data-act="again"]');if(a)a.onclick=function(){start(l)};
+  var n=app.querySelector('[data-act="nextLesson"]');if(n)n.onclick=function(){start(nxt)};
+  app.querySelector('[data-act="home"]').onclick=home;
+}
+home();
+cloudInit();
+setTimeout(function(){if(cloudState==='checking'){cloudState='local';rerenderHome()}},12000);
+})();
+</script>
+</body></html>
